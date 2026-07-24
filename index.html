@@ -1,0 +1,3672 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>WORK DNA — 일할 때 나타나는 숨은 나 찾기</title>
+    <meta
+      name="description"
+      content="당신의 운영 스타일을 분석하고 어떤 직원과 최고의 팀을 만드는지 알려드립니다."
+    />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <link
+      rel="stylesheet"
+      as="style"
+      crossorigin
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
+    />
+    <style>
+      :root {
+        --purple: #5b2eff;
+        --purple-lit: #7b54ff;
+        --purple-deep: #3b18c9;
+        --yellow: #ffd43b;
+        --black: #0b0a12;
+        --ink: #14121f;
+        --white: #ffffff;
+        --surface: #f6f5fb;
+        --surface-2: #eceaf7;
+        --muted: #6c6a7c;
+        --line: rgba(11, 10, 18, 0.08);
+        --radius: 26px;
+        --radius-lg: 36px;
+        --shadow-soft: 0 18px 50px -20px rgba(43, 20, 120, 0.35);
+        --shadow-hard: 0 30px 80px -24px rgba(43, 20, 120, 0.55);
+        --font:
+          "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+          system-ui, "Apple SD Gothic Neo", sans-serif;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        scroll-behavior: smooth;
+        -webkit-text-size-adjust: 100%;
+      }
+      body {
+        font-family: var(--font);
+        background: var(--white);
+        color: var(--ink);
+        line-height: 1.5;
+        letter-spacing: -0.02em;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+      }
+      img,
+      svg {
+        display: block;
+        max-width: 100%;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      button {
+        font-family: inherit;
+        cursor: pointer;
+        border: none;
+        background: none;
+      }
+      .wrap {
+        width: min(1160px, 92vw);
+        margin-inline: auto;
+      }
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        color: var(--purple);
+        text-transform: uppercase;
+        padding: 7px 14px;
+        border-radius: 999px;
+        background: rgba(91, 46, 255, 0.08);
+      }
+      .eyebrow.on-dark {
+        color: var(--yellow);
+        background: rgba(255, 212, 59, 0.12);
+      }
+      .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+        display: inline-block;
+      }
+      h1,
+      h2,
+      h3 {
+        letter-spacing: -0.045em;
+        line-height: 1.02;
+        font-weight: 800;
+      }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+      }
+
+      /* ============ NAV ============ */
+      .nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 60;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px clamp(18px, 4vw, 40px);
+        backdrop-filter: saturate(160%) blur(18px);
+        -webkit-backdrop-filter: saturate(160%) blur(18px);
+        background: rgba(11, 10, 18, 0.55);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .nav.hide {
+        transform: translateY(-110%);
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #fff;
+        font-weight: 800;
+        font-size: 17px;
+        letter-spacing: -0.03em;
+      }
+      .brand .helix {
+        width: 22px;
+        height: 22px;
+      }
+      .brand b {
+        color: var(--yellow);
+      }
+      .nav-cta {
+        color: var(--black);
+        background: var(--yellow);
+        font-weight: 800;
+        font-size: 14px;
+        padding: 10px 18px;
+        border-radius: 999px;
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+      .nav-cta:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 24px -8px rgba(255, 212, 59, 0.6);
+      }
+
+      /* ============ HERO ============ */
+      .hero {
+        position: relative;
+        min-height: 100svh;
+        background: radial-gradient(
+          120% 90% at 50% -10%,
+          #241a52 0%,
+          #120e28 42%,
+          var(--black) 100%
+        );
+        color: #fff;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        padding: 118px 0 60px;
+      }
+      .hero-grain {
+        position: absolute;
+        inset: 0;
+        opacity: 0.5;
+        pointer-events: none;
+        background-image: radial-gradient(
+          rgba(255, 255, 255, 0.05) 1px,
+          transparent 1px
+        );
+        background-size: 3px 3px;
+        mix-blend-mode: screen;
+      }
+      .hero .wrap {
+        display: grid;
+        grid-template-columns: 1.05fr 0.95fr;
+        gap: 40px;
+        align-items: center;
+        position: relative;
+        z-index: 2;
+      }
+      .hero-title {
+        font-size: clamp(58px, 12vw, 132px);
+        font-weight: 900;
+        line-height: 0.9;
+        letter-spacing: -0.06em;
+        background: linear-gradient(180deg, #fff 30%, #d8ccff 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        margin-bottom: 22px;
+      }
+      .hero-title .dna {
+        color: var(--yellow);
+        -webkit-text-fill-color: var(--yellow);
+        position: relative;
+        display: inline-block;
+      }
+      .hero-sub {
+        font-size: clamp(20px, 2.7vw, 28px);
+        font-weight: 800;
+        color: #fff;
+        letter-spacing: -0.04em;
+        margin-bottom: 16px;
+      }
+      .hero-desc {
+        font-size: clamp(15px, 1.7vw, 18px);
+        color: #c9c4e0;
+        font-weight: 500;
+        max-width: 30ch;
+        margin-bottom: 34px;
+      }
+      .hero-cta {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 16px;
+        padding: 16px 26px;
+        border-radius: 999px;
+        transition:
+          transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1),
+          box-shadow 0.22s ease,
+          background 0.2s ease;
+        will-change: transform;
+      }
+      .btn-primary {
+        background: var(--yellow);
+        color: var(--black);
+        box-shadow: 0 14px 34px -12px rgba(255, 212, 59, 0.7);
+      }
+      .btn-primary:hover {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 20px 44px -12px rgba(255, 212, 59, 0.85);
+      }
+      .btn-ghost {
+        background: rgba(255, 255, 255, 0.09);
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+      }
+      .btn-ghost:hover {
+        transform: translateY(-3px);
+        background: rgba(255, 255, 255, 0.16);
+      }
+      .hero-badges {
+        display: flex;
+        gap: 18px;
+        margin-top: 26px;
+        flex-wrap: wrap;
+      }
+      .hb {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #b8b2d6;
+        font-size: 13.5px;
+        font-weight: 600;
+      }
+      .hb svg {
+        width: 17px;
+        height: 17px;
+        color: var(--yellow);
+      }
+
+      /* ---- Mascot stage ---- */
+      .stage {
+        position: relative;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        min-height: 440px;
+      }
+      .spotlight {
+        position: absolute;
+        top: -40px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 340px;
+        height: 520px;
+        background: conic-gradient(
+          from 180deg at 50% 0,
+          rgba(123, 84, 255, 0) 42%,
+          rgba(123, 84, 255, 0.45) 50%,
+          rgba(123, 84, 255, 0) 58%
+        );
+        filter: blur(6px);
+        pointer-events: none;
+        animation: flicker 5s ease-in-out infinite;
+      }
+      .glow {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 300px;
+        height: 120px;
+        border-radius: 50%;
+        background: radial-gradient(
+          closest-side,
+          rgba(123, 84, 255, 0.55),
+          transparent
+        );
+        filter: blur(14px);
+      }
+      .mascot {
+        position: relative;
+        width: min(400px, 80%);
+        z-index: 2;
+        filter: drop-shadow(0 30px 40px rgba(0, 0, 0, 0.5));
+        transform-origin: 50% 92%;
+        animation: dance 1.8s ease-in-out infinite;
+      }
+      .mascot .arm-tap {
+        animation: tapWrist 1.8s ease-in-out infinite;
+      }
+      .mascot .tap-ring {
+        transform-box: fill-box;
+        transform-origin: center;
+        animation: tapRing 1.8s ease-out infinite;
+      }
+      .mascot .head {
+        transform-box: fill-box;
+        transform-origin: 50% 100%;
+        animation: headBob 1.8s ease-in-out infinite;
+      }
+      .note {
+        position: absolute;
+        color: var(--yellow);
+        opacity: 0.9;
+        animation: rise 4s linear infinite;
+      }
+      .note.n1 {
+        left: 6%;
+        top: 36%;
+        animation-delay: 0s;
+      }
+      .note.n2 {
+        right: 8%;
+        top: 24%;
+        animation-delay: 1.3s;
+      }
+      .note.n3 {
+        right: 16%;
+        top: 56%;
+        animation-delay: 2.4s;
+      }
+      .mascot-name {
+        position: absolute;
+        bottom: -4px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        white-space: nowrap;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        padding: 8px 16px;
+        border-radius: 999px;
+        font-weight: 800;
+        font-size: 15px;
+        z-index: 3;
+      }
+      .mascot-name .em {
+        font-size: 18px;
+      }
+      @keyframes bob {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-14px);
+        }
+      }
+      @keyframes dance {
+        0% {
+          transform: translateY(0) rotate(-2deg);
+        }
+        25% {
+          transform: translateY(-6px) rotate(0deg);
+        }
+        50% {
+          transform: translateY(0) rotate(2deg);
+        }
+        75% {
+          transform: translateY(-6px) rotate(0deg);
+        }
+        100% {
+          transform: translateY(0) rotate(-2deg);
+        }
+      }
+      @keyframes tapWrist {
+        0% {
+          transform: translate(8px, -6px);
+        }
+        10% {
+          transform: translate(0, 0);
+        }
+        20% {
+          transform: translate(7px, -5px);
+        }
+        30% {
+          transform: translate(0, 0);
+        }
+        42% {
+          transform: translate(8px, -6px);
+        }
+        58% {
+          transform: translate(24px, -34px);
+        }
+        80% {
+          transform: translate(8px, -6px);
+        }
+        100% {
+          transform: translate(8px, -6px);
+        }
+      }
+      @keyframes tapRing {
+        0%,
+        7% {
+          transform: scale(0.2);
+          opacity: 0;
+        }
+        10% {
+          transform: scale(0.5);
+          opacity: 0.95;
+        }
+        20% {
+          transform: scale(1.15);
+          opacity: 0;
+        }
+        27% {
+          transform: scale(0.2);
+          opacity: 0;
+        }
+        30% {
+          transform: scale(0.5);
+          opacity: 0.95;
+        }
+        40% {
+          transform: scale(1.15);
+          opacity: 0;
+        }
+        41%,
+        100% {
+          opacity: 0;
+        }
+      }
+      @keyframes headBob {
+        0%,
+        100% {
+          transform: rotate(-2deg);
+        }
+        50% {
+          transform: rotate(2deg);
+        }
+      }
+      @keyframes wave {
+        0%,
+        100% {
+          transform: rotate(-4deg);
+        }
+        50% {
+          transform: rotate(10deg);
+        }
+      }
+      @keyframes flicker {
+        0%,
+        100% {
+          opacity: 0.85;
+        }
+        45% {
+          opacity: 1;
+        }
+        70% {
+          opacity: 0.72;
+        }
+      }
+      @keyframes rise {
+        0% {
+          transform: translateY(10px) rotate(0);
+          opacity: 0;
+        }
+        20% {
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-70px) rotate(18deg);
+          opacity: 0;
+        }
+      }
+      /* speech bubble */
+      .speech {
+        position: absolute;
+        top: 2px;
+        left: 50%;
+        z-index: 5;
+        pointer-events: none;
+        transform: translateX(-50%) translateY(-6px);
+        max-width: min(300px, 84%);
+        width: max-content;
+        background: #fff;
+        color: #14121f;
+        text-align: center;
+        font-weight: 800;
+        font-size: 15.5px;
+        letter-spacing: -0.03em;
+        line-height: 1.36;
+        padding: 14px 20px;
+        border-radius: 22px 22px 22px 7px;
+        border: 2px solid rgba(91, 46, 255, 0.28);
+        box-shadow: 0 20px 44px -16px rgba(0, 0, 0, 0.55);
+        opacity: 0;
+        transition:
+          opacity 0.28s ease,
+          transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1),
+          border-color 0.25s ease;
+      }
+      .speech::after {
+        content: "";
+        position: absolute;
+        left: 30px;
+        bottom: -9px;
+        width: 20px;
+        height: 20px;
+        background: #fff;
+        border-radius: 0 0 6px 0;
+        transform: rotate(45deg);
+      }
+      .speech.angry {
+        border-color: #ff5a4a;
+        color: #c22f22;
+      }
+      .speech.hype {
+        border-color: var(--yellow);
+        color: #8a6b00;
+      }
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0) rotate(0);
+        }
+        18% {
+          transform: translateX(-7px) rotate(-3.5deg);
+        }
+        36% {
+          transform: translateX(7px) rotate(3.5deg);
+        }
+        54% {
+          transform: translateX(-6px) rotate(-2.5deg);
+        }
+        72% {
+          transform: translateX(6px) rotate(2.5deg);
+        }
+        88% {
+          transform: translateX(-3px) rotate(-1deg);
+        }
+      }
+      @keyframes jump {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        38% {
+          transform: translateY(-30px);
+        }
+        66% {
+          transform: translateY(6px);
+        }
+        82% {
+          transform: translateY(-4px);
+        }
+      }
+      .mascot.mad {
+        animation: shake 0.55s ease-in-out;
+      }
+      .mascot.yay {
+        animation: jump 0.62s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      /* ============ MARQUEE ============ */
+      .marquee {
+        background: var(--yellow);
+        color: var(--black);
+        overflow: hidden;
+        padding: 14px 0;
+        border-block: 3px solid var(--black);
+      }
+      .marquee-track {
+        display: flex;
+        gap: 40px;
+        white-space: nowrap;
+        width: max-content;
+        animation: scroll 24s linear infinite;
+        font-weight: 900;
+        font-size: 17px;
+        letter-spacing: -0.03em;
+        text-transform: uppercase;
+      }
+      .marquee-track span {
+        display: flex;
+        align-items: center;
+        gap: 40px;
+      }
+      @keyframes scroll {
+        to {
+          transform: translateX(-50%);
+        }
+      }
+
+      /* ============ SECTION SHELL ============ */
+      .section {
+        padding: clamp(72px, 10vw, 130px) 0;
+      }
+      .section-head {
+        max-width: 640px;
+        margin-bottom: clamp(40px, 6vw, 64px);
+      }
+      .section-head h2 {
+        font-size: clamp(34px, 5.4vw, 60px);
+        margin: 16px 0 14px;
+      }
+      .section-head p {
+        color: var(--muted);
+        font-size: clamp(16px, 2vw, 19px);
+        font-weight: 500;
+      }
+
+      /* ============ FEATURES ============ */
+      .features {
+        background: var(--surface);
+      }
+      .feat-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+      }
+      .feat {
+        background: #fff;
+        border-radius: var(--radius);
+        padding: 30px 26px;
+        border: 1px solid var(--line);
+        box-shadow: var(--shadow-soft);
+        transition:
+          transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+          box-shadow 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+      .feat:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--shadow-hard);
+      }
+      .feat-ic {
+        width: 54px;
+        height: 54px;
+        border-radius: 16px;
+        display: grid;
+        place-items: center;
+        margin-bottom: 18px;
+        background: linear-gradient(140deg, var(--purple), var(--purple-lit));
+        color: #fff;
+      }
+      .feat:nth-child(2) .feat-ic,
+      .feat:nth-child(4) .feat-ic {
+        background: linear-gradient(140deg, #1c1830, #3b2f66);
+      }
+      .feat:nth-child(3) .feat-ic,
+      .feat:nth-child(5) .feat-ic {
+        background: linear-gradient(140deg, var(--yellow), #ffbf00);
+        color: var(--black);
+      }
+      .feat-ic svg {
+        width: 26px;
+        height: 26px;
+      }
+      .feat h3 {
+        font-size: 20px;
+        margin-bottom: 8px;
+      }
+      .feat p {
+        color: var(--muted);
+        font-size: 15px;
+        font-weight: 500;
+      }
+      .feat .idx {
+        position: absolute;
+        top: 22px;
+        right: 24px;
+        font-weight: 900;
+        font-size: 14px;
+        color: var(--surface-2);
+      }
+
+      /* ============ TYPES ============ */
+      .types {
+        background: var(--black);
+        color: #fff;
+      }
+      .types .section-head p {
+        color: #a9a4c8;
+      }
+      .type-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+      }
+      .tcard {
+        position: relative;
+        border-radius: var(--radius);
+        padding: 26px 22px 24px;
+        background: linear-gradient(
+          165deg,
+          rgba(255, 255, 255, 0.08),
+          rgba(255, 255, 255, 0.02)
+        );
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition:
+          transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+          box-shadow 0.35s ease,
+          border-color 0.3s;
+        overflow: hidden;
+        cursor: default;
+        transform-style: preserve-3d;
+      }
+      .tcard::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        opacity: 0;
+        transition: opacity 0.35s;
+        background: radial-gradient(
+          120% 80% at 50% 0,
+          var(--tc, var(--purple)),
+          transparent 70%
+        );
+      }
+      .tcard:hover {
+        transform: translateY(-10px) rotateX(6deg);
+        box-shadow: 0 40px 70px -30px var(--tc, var(--purple));
+        border-color: rgba(255, 255, 255, 0.28);
+      }
+      .tcard:hover::before {
+        opacity: 0.28;
+      }
+      .tcard .em {
+        font-size: 52px;
+        line-height: 1;
+        display: inline-block;
+        transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .tcard:hover .em {
+        transform: scale(1.18) rotate(-6deg) translateY(-4px);
+      }
+      .tcard h3 {
+        font-size: 22px;
+        margin: 16px 0 8px;
+        position: relative;
+      }
+      .tcard p {
+        color: #b7b2d4;
+        font-size: 14px;
+        font-weight: 500;
+        position: relative;
+        min-height: 40px;
+      }
+      .tcard .chip {
+        margin-top: 14px;
+        display: inline-flex;
+        font-size: 12px;
+        font-weight: 700;
+        color: #fff;
+        padding: 5px 11px;
+        border-radius: 999px;
+        background: var(--tc, var(--purple));
+        position: relative;
+      }
+
+      /* ============ HOW / QUIZ INTRO ============ */
+      .intro {
+        background: linear-gradient(180deg, #fff, var(--surface));
+      }
+      .intro-card {
+        background: linear-gradient(135deg, var(--purple), var(--purple-deep));
+        color: #fff;
+        border-radius: var(--radius-lg);
+        padding: clamp(36px, 6vw, 64px);
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 40px;
+        align-items: center;
+        box-shadow: var(--shadow-hard);
+        position: relative;
+        overflow: hidden;
+      }
+      .intro-card::after {
+        content: "";
+        position: absolute;
+        right: -80px;
+        top: -80px;
+        width: 340px;
+        height: 340px;
+        border-radius: 50%;
+        background: radial-gradient(
+          closest-side,
+          rgba(255, 212, 59, 0.35),
+          transparent
+        );
+      }
+      .intro-card h2 {
+        font-size: clamp(30px, 4.4vw, 48px);
+        margin-bottom: 16px;
+        position: relative;
+      }
+      .intro-card p {
+        color: #e4ddff;
+        font-size: 17px;
+        font-weight: 500;
+        margin-bottom: 28px;
+        position: relative;
+        max-width: 34ch;
+      }
+      .stat-row {
+        display: flex;
+        gap: 26px;
+        position: relative;
+        flex-wrap: wrap;
+      }
+      .stat b {
+        display: block;
+        font-size: 34px;
+        font-weight: 900;
+        color: var(--yellow);
+        letter-spacing: -0.04em;
+      }
+      .stat span {
+        font-size: 13px;
+        color: #d5ccff;
+        font-weight: 600;
+      }
+      .intro-visual {
+        position: relative;
+        display: grid;
+        place-items: center;
+        z-index: 1;
+      }
+
+      /* ============ QUIZ (overlay) ============ */
+      .quiz {
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        background: radial-gradient(
+          130% 100% at 50% 0,
+          #241a52,
+          #120e28 55%,
+          var(--black)
+        );
+        color: #fff;
+        display: none;
+        flex-direction: column;
+        padding: 22px clamp(18px, 5vw, 40px) 40px;
+      }
+      .quiz.open {
+        display: flex;
+        animation: fadeIn 0.4s ease;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      .quiz-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 8px;
+      }
+      .quiz-close {
+        color: #fff;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        display: grid;
+        place-items: center;
+        transition: 0.2s;
+      }
+      .quiz-close:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+      .q-count {
+        font-weight: 800;
+        font-size: 15px;
+        color: #cfc9ea;
+      }
+      .q-count b {
+        color: var(--yellow);
+        font-size: 20px;
+      }
+      .progress-shell {
+        height: 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.1);
+        overflow: hidden;
+        position: relative;
+      }
+      .progress-bar {
+        height: 100%;
+        width: 0;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--yellow), #ffe98a);
+        transition: width 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+        box-shadow: 0 0 18px rgba(255, 212, 59, 0.6);
+      }
+      .quiz-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        max-width: 760px;
+        margin-inline: auto;
+        width: 100%;
+      }
+      .q-stage {
+        display: inline-flex;
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        color: var(--yellow);
+        text-transform: uppercase;
+        margin-bottom: 20px;
+        opacity: 0.9;
+      }
+      .q-text {
+        font-size: clamp(26px, 4.6vw, 44px);
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        line-height: 1.18;
+        margin-bottom: 44px;
+        min-height: 2.2em;
+        display: flex;
+        align-items: center;
+      }
+      .q-options {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        width: 100%;
+      }
+      .opt {
+        text-align: left;
+        padding: 26px 24px;
+        border-radius: 24px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1.5px solid rgba(255, 255, 255, 0.14);
+        color: #fff;
+        font-size: 18px;
+        font-weight: 700;
+        line-height: 1.35;
+        transition:
+          transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1),
+          background 0.2s,
+          border-color 0.2s;
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+        min-height: 104px;
+      }
+      .opt .key {
+        flex: none;
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+        font-size: 16px;
+        font-weight: 900;
+        background: rgba(255, 255, 255, 0.14);
+      }
+      .opt:hover {
+        transform: translateY(-4px);
+        background: rgba(91, 46, 255, 0.5);
+        border-color: var(--purple-lit);
+      }
+      .opt:hover .key {
+        background: var(--yellow);
+        color: var(--black);
+      }
+      .opt.pick {
+        background: var(--purple);
+        border-color: var(--yellow);
+        transform: scale(0.98);
+      }
+      .q-anim-in {
+        animation: slideIn 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .q-anim-out {
+        animation: slideOut 0.3s ease forwards;
+      }
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateX(46px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      @keyframes slideOut {
+        to {
+          opacity: 0;
+          transform: translateX(-46px);
+        }
+      }
+      .quiz-foot {
+        text-align: center;
+        margin-top: 26px;
+      }
+      .q-back {
+        color: #b8b2d6;
+        font-weight: 700;
+        font-size: 14px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: 0.2s;
+      }
+      .q-back:hover {
+        color: #fff;
+      }
+      .helix-strip {
+        display: flex;
+        justify-content: center;
+        gap: 5px;
+        margin-top: 14px;
+      }
+      .helix-strip i {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.16);
+        transition: 0.4s;
+      }
+      .helix-strip i.on {
+        background: var(--yellow);
+        box-shadow: 0 0 10px rgba(255, 212, 59, 0.7);
+      }
+
+      /* loader */
+      .calc {
+        position: absolute;
+        inset: 0;
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 26px;
+        background: radial-gradient(
+          130% 100% at 50% 0,
+          #241a52,
+          #120e28 55%,
+          var(--black)
+        );
+        z-index: 5;
+      }
+      .calc.on {
+        display: flex;
+      }
+      .dna-spin {
+        width: 70px;
+        height: 120px;
+        position: relative;
+      }
+      .dna-spin i {
+        position: absolute;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        left: calc(50% - 7px);
+        animation: helix 1.6s linear infinite;
+      }
+      .calc-txt {
+        font-weight: 800;
+        font-size: 20px;
+      }
+      .calc-sub {
+        color: #b8b2d6;
+        font-weight: 500;
+        font-size: 14px;
+        margin-top: -14px;
+      }
+      @keyframes helix {
+        0% {
+          transform: translateY(0) translateX(-26px) scale(0.6);
+          background: var(--purple-lit);
+          opacity: 0.4;
+        }
+        50% {
+          transform: translateY(52px) translateX(26px) scale(1.2);
+          background: var(--yellow);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(104px) translateX(-26px) scale(0.6);
+          background: var(--purple-lit);
+          opacity: 0.4;
+        }
+      }
+
+      /* ============ RESULT (overlay) ============ */
+      .result {
+        position: fixed;
+        inset: 0;
+        z-index: 110;
+        background: var(--surface);
+        overflow-y: auto;
+        display: none;
+      }
+      .result.open {
+        display: block;
+        animation: fadeIn 0.5s ease;
+      }
+      .res-hero {
+        background: radial-gradient(
+          120% 100% at 50% -10%,
+          #241a52,
+          #120e28 55%,
+          var(--black)
+        );
+        color: #fff;
+        padding: 78px 0 90px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .res-close {
+        position: fixed;
+        top: 18px;
+        right: 18px;
+        z-index: 5;
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.14);
+        color: #fff;
+        display: grid;
+        place-items: center;
+        backdrop-filter: blur(8px);
+        transition: 0.2s;
+      }
+      .res-close:hover {
+        background: rgba(255, 255, 255, 0.28);
+      }
+      .res-tag {
+        color: var(--yellow);
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        font-size: 13px;
+      }
+      .res-emoji {
+        font-size: clamp(96px, 20vw, 150px);
+        line-height: 1;
+        margin: 14px 0 6px;
+        filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.5));
+        animation: bob 4s ease-in-out infinite;
+      }
+      .res-name {
+        font-size: clamp(38px, 7vw, 72px);
+        font-weight: 900;
+        letter-spacing: -0.05em;
+      }
+      .res-name .em {
+        -webkit-text-fill-color: initial;
+      }
+      .res-onel {
+        color: #d3cdf0;
+        font-size: clamp(16px, 2.2vw, 20px);
+        font-weight: 600;
+        margin-top: 10px;
+      }
+
+      .res-body {
+        width: min(1060px, 92vw);
+        margin: -56px auto 0;
+        position: relative;
+        z-index: 3;
+        padding-bottom: 80px;
+      }
+      .res-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+      }
+      .panel {
+        background: #fff;
+        border-radius: var(--radius);
+        padding: 28px;
+        border: 1px solid var(--line);
+        box-shadow: var(--shadow-soft);
+      }
+      .panel h4 {
+        font-size: 14px;
+        font-weight: 800;
+        letter-spacing: 0.02em;
+        color: var(--purple);
+        text-transform: uppercase;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .panel h4.neg {
+        color: #e0453b;
+      }
+      .li {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        padding: 11px 0;
+        border-top: 1px solid var(--line);
+        font-weight: 600;
+        font-size: 15.5px;
+      }
+      .li:first-of-type {
+        border-top: none;
+      }
+      .li .mk {
+        flex: none;
+        width: 24px;
+        height: 24px;
+        border-radius: 8px;
+        display: grid;
+        place-items: center;
+        font-size: 13px;
+        font-weight: 900;
+        background: rgba(91, 46, 255, 0.1);
+        color: var(--purple);
+      }
+      .li.neg .mk {
+        background: rgba(224, 69, 59, 0.1);
+        color: #e0453b;
+      }
+      .emp-row {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        padding: 14px 0;
+        border-top: 1px solid var(--line);
+      }
+      .emp-row:first-of-type {
+        border-top: none;
+      }
+      .emp-row .em {
+        font-size: 40px;
+        line-height: 1;
+      }
+      .emp-row .txt b {
+        display: block;
+        font-size: 16px;
+        font-weight: 800;
+      }
+      .emp-row .txt span {
+        font-size: 13.5px;
+        color: var(--muted);
+        font-weight: 500;
+      }
+      .emp-row .badge {
+        margin-left: auto;
+        font-size: 12px;
+        font-weight: 800;
+        padding: 5px 11px;
+        border-radius: 999px;
+      }
+      .badge.good {
+        background: rgba(52, 199, 89, 0.14);
+        color: #1f9d4d;
+      }
+      .badge.bad {
+        background: rgba(224, 69, 59, 0.12);
+        color: #e0453b;
+      }
+      .panel.full {
+        grid-column: 1/-1;
+      }
+      .radar-wrap {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 28px;
+        align-items: center;
+      }
+      .team-meter {
+        margin-top: 6px;
+      }
+      .tm-bar {
+        height: 16px;
+        border-radius: 999px;
+        background: var(--surface-2);
+        overflow: hidden;
+        margin: 10px 0 6px;
+      }
+      .tm-fill {
+        height: 100%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--purple), var(--yellow));
+        width: 0;
+        transition: width 1.1s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .tm-row {
+        display: flex;
+        justify-content: space-between;
+        font-weight: 700;
+        font-size: 13.5px;
+        color: var(--muted);
+      }
+      .res-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 28px;
+      }
+      .btn-dark {
+        background: var(--black);
+        color: #fff;
+      }
+      .btn-dark:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-hard);
+      }
+
+      /* share card */
+      .share-stage {
+        position: fixed;
+        inset: 0;
+        z-index: 120;
+        background: rgba(11, 10, 18, 0.82);
+        backdrop-filter: blur(10px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        overflow-y: auto;
+      }
+      .share-stage.open {
+        display: flex;
+        animation: fadeIn 0.3s ease;
+      }
+      .share-panel {
+        max-width: 420px;
+        width: 100%;
+      }
+      #shareCard {
+        width: 100%;
+        aspect-ratio: 4/5;
+        border-radius: 28px;
+        overflow: hidden;
+        position: relative;
+        background: radial-gradient(
+          120% 90% at 50% 0,
+          #2b2060,
+          #141033 55%,
+          #0b0a12
+        );
+        color: #fff;
+        padding: 34px 30px;
+        display: flex;
+        flex-direction: column;
+      }
+      #shareCard .sc-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+      }
+      #shareCard .sc-top b {
+        color: var(--yellow);
+      }
+      #shareCard .sc-em {
+        font-size: 118px;
+        text-align: center;
+        margin: auto 0 4px;
+        filter: drop-shadow(0 14px 24px rgba(0, 0, 0, 0.5));
+      }
+      #shareCard .sc-tag {
+        text-align: center;
+        color: var(--yellow);
+        font-weight: 800;
+        font-size: 13px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      #shareCard .sc-name {
+        text-align: center;
+        font-size: 42px;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+        margin-top: 2px;
+      }
+      #shareCard .sc-one {
+        text-align: center;
+        color: #d3cdf0;
+        font-size: 15px;
+        font-weight: 600;
+        margin-top: 8px;
+        padding: 0 6px;
+      }
+      #shareCard .sc-foot {
+        margin-top: auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid rgba(255, 255, 255, 0.16);
+        padding-top: 16px;
+        font-size: 12.5px;
+        color: #b8b2d6;
+        font-weight: 600;
+      }
+      #shareCard .sc-score {
+        background: var(--yellow);
+        color: var(--black);
+        border-radius: 999px;
+        padding: 6px 14px;
+        font-weight: 900;
+        font-size: 13px;
+      }
+      .share-btns {
+        display: flex;
+        gap: 10px;
+        margin-top: 16px;
+      }
+      .share-btns .btn {
+        flex: 1;
+        font-size: 15px;
+        padding: 14px;
+      }
+      .share-close {
+        position: absolute;
+        top: 18px;
+        right: 18px;
+        color: #fff;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.14);
+        display: grid;
+        place-items: center;
+      }
+
+      /* ============ PREVIEW MODAL ============ */
+      .preview {
+        position: fixed;
+        inset: 0;
+        z-index: 105;
+        background: rgba(11, 10, 18, 0.8);
+        backdrop-filter: blur(10px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+      }
+      .preview.open {
+        display: flex;
+        animation: fadeIn 0.3s ease;
+      }
+      .preview-inner {
+        background: #fff;
+        border-radius: var(--radius-lg);
+        max-width: 760px;
+        width: 100%;
+        padding: 34px;
+        max-height: 88vh;
+        overflow-y: auto;
+        position: relative;
+      }
+      .preview-inner h3 {
+        font-size: 26px;
+        margin-bottom: 6px;
+      }
+      .preview-inner .lead {
+        color: var(--muted);
+        font-size: 15px;
+        margin-bottom: 22px;
+        font-weight: 500;
+      }
+      .pv-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .pv {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        padding: 14px;
+        border-radius: 18px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+      }
+      .pv .em {
+        font-size: 34px;
+      }
+      .pv b {
+        font-size: 15px;
+        display: block;
+      }
+      .pv span {
+        font-size: 12.5px;
+        color: var(--muted);
+        font-weight: 500;
+      }
+      .preview-close {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--surface);
+        display: grid;
+        place-items: center;
+      }
+
+      /* ============ INTRO FORM ============ */
+      .intro-form {
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        background: radial-gradient(
+          130% 100% at 50% 0,
+          #241a52,
+          #120e28 55%,
+          var(--black)
+        );
+        color: #fff;
+        display: none;
+        flex-direction: column;
+        padding: 22px clamp(18px, 5vw, 40px) 40px;
+        overflow-y: auto;
+      }
+      .intro-form.open {
+        display: flex;
+        animation: fadeIn 0.4s ease;
+      }
+      .if-top {
+        display: flex;
+        justify-content: flex-end;
+      }
+      .if-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        max-width: 520px;
+        margin-inline: auto;
+        width: 100%;
+        text-align: center;
+        padding: 10px 0 20px;
+      }
+      .if-title {
+        font-size: clamp(28px, 5vw, 40px);
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        margin: 14px 0 10px;
+      }
+      .if-sub {
+        color: #c9c4e0;
+        font-size: 15.5px;
+        font-weight: 500;
+        line-height: 1.6;
+        margin-bottom: 28px;
+      }
+      .if-card {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 24px;
+        padding: 24px 22px;
+        text-align: left;
+        backdrop-filter: blur(6px);
+      }
+      .if-field {
+        margin-bottom: 20px;
+      }
+      .if-field:last-child {
+        margin-bottom: 0;
+      }
+      .if-field label {
+        display: block;
+        font-size: 14px;
+        font-weight: 800;
+        color: #e6e2f7;
+        margin-bottom: 9px;
+      }
+      .if-field .req {
+        font-style: normal;
+        font-size: 11px;
+        font-weight: 800;
+        color: var(--black);
+        background: var(--yellow);
+        padding: 2px 7px;
+        border-radius: 999px;
+        margin-left: 6px;
+        vertical-align: middle;
+      }
+      .if-field input {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1.5px solid rgba(255, 255, 255, 0.16);
+        border-radius: 14px;
+        padding: 14px 16px;
+        color: #fff;
+        font-family: inherit;
+        font-size: 16px;
+        font-weight: 600;
+        transition:
+          border-color 0.2s,
+          background 0.2s;
+      }
+      .if-field input::placeholder {
+        color: #8b85ad;
+        font-weight: 500;
+      }
+      .if-field input:focus {
+        outline: none;
+        border-color: var(--yellow);
+        background: rgba(255, 255, 255, 0.13);
+      }
+      .if-field input.bad {
+        border-color: #ff6b5a;
+        background: rgba(255, 107, 90, 0.12);
+      }
+      .if-err {
+        display: none;
+        color: #ff9182;
+        font-size: 13px;
+        font-weight: 600;
+        margin-top: 7px;
+      }
+      .if-err.show {
+        display: block;
+      }
+      .if-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .chip-opt {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1.5px solid rgba(255, 255, 255, 0.16);
+        color: #ddd8f0;
+        border-radius: 999px;
+        padding: 11px 16px;
+        font-size: 14.5px;
+        font-weight: 700;
+        font-family: inherit;
+        transition:
+          transform 0.18s cubic-bezier(0.2, 0.8, 0.2, 1),
+          background 0.2s,
+          border-color 0.2s,
+          color 0.2s;
+      }
+      .chip-opt:hover {
+        transform: translateY(-2px);
+        background: rgba(255, 255, 255, 0.15);
+      }
+      .chip-opt.on {
+        background: var(--yellow);
+        border-color: var(--yellow);
+        color: var(--black);
+      }
+      .if-go {
+        width: 100%;
+        margin-top: 24px;
+        font-size: 17px;
+        padding: 17px;
+      }
+      .if-note {
+        color: #8b85ad;
+        font-size: 12.5px;
+        font-weight: 500;
+        margin-top: 16px;
+        line-height: 1.5;
+      }
+
+      /* ============ FOOTER ============ */
+      .footer {
+        background: var(--black);
+        color: #fff;
+        text-align: center;
+        padding: clamp(72px, 10vw, 120px) 0;
+      }
+      .footer h2 {
+        font-size: clamp(30px, 5vw, 54px);
+        line-height: 1.14;
+        margin-bottom: 28px;
+      }
+      .footer h2 .em {
+        color: var(--yellow);
+        -webkit-text-fill-color: initial;
+      }
+      .footer .btn-primary {
+        font-size: 17px;
+      }
+      .footer-brand {
+        margin-top: 60px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        color: #8b86a8;
+        font-size: 13px;
+        font-weight: 500;
+      }
+      .footer-brand .brand {
+        opacity: 0.9;
+      }
+
+      /* ============ RESPONSIVE ============ */
+      @media (max-width: 920px) {
+        .hero .wrap {
+          grid-template-columns: 1fr;
+          text-align: center;
+          gap: 8px;
+        }
+        .hero-desc {
+          margin-inline: auto;
+        }
+        .hero-cta,
+        .hero-badges {
+          justify-content: center;
+        }
+        .stage {
+          order: -1;
+          min-height: 360px;
+        }
+        .feat-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .type-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .intro-card {
+          grid-template-columns: 1fr;
+          text-align: center;
+        }
+        .intro-card p {
+          margin-inline: auto;
+        }
+        .stat-row {
+          justify-content: center;
+        }
+        .res-grid {
+          grid-template-columns: 1fr;
+        }
+        .radar-wrap {
+          grid-template-columns: 1fr;
+          justify-items: center;
+          text-align: center;
+        }
+      }
+      @media (max-width: 560px) {
+        .feat-grid {
+          grid-template-columns: 1fr;
+        }
+        .type-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .q-options {
+          grid-template-columns: 1fr;
+        }
+        .opt {
+          min-height: auto;
+        }
+        .marquee-track {
+          font-size: 15px;
+        }
+        .hero-title {
+          font-size: clamp(52px, 18vw, 80px);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation: none !important;
+          transition: none !important;
+          scroll-behavior: auto !important;
+        }
+      }
+      .res-emoji svg,
+      .sc-em svg,
+      .pv .em svg,
+      .emp-row .em svg,
+      .tcard .em svg {
+        width: 1em;
+        height: 1em;
+        display: block;
+      }
+      .res-emoji svg,
+      .sc-em svg {
+        margin-inline: auto;
+        filter: drop-shadow(0 16px 22px rgba(0, 0, 0, 0.5));
+      }
+      .pv .em,
+      .emp-row .em {
+        line-height: 0;
+      }
+      .sub-head {
+        font-size: 15px;
+        font-weight: 800;
+        color: var(--ink);
+        margin: 6px 0 4px;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+      }
+      .sub-head.neg {
+        color: #c73a2f;
+        margin-top: 24px;
+      }
+      .mind-box {
+        margin-top: 26px;
+        padding: 22px;
+        border-radius: 20px;
+        background: var(--surface);
+        border: 1px dashed rgba(91, 46, 255, 0.25);
+      }
+      .mind-head {
+        font-size: 14px;
+        font-weight: 800;
+        color: var(--purple);
+        margin-bottom: 14px;
+        letter-spacing: 0.01em;
+      }
+      .mind {
+        position: relative;
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 16px 16px 16px 5px;
+        padding: 13px 16px;
+        margin-bottom: 11px;
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--ink);
+        box-shadow: 0 6px 16px -10px rgba(43, 20, 120, 0.35);
+        line-height: 1.45;
+      }
+      .mind:last-child {
+        margin-bottom: 0;
+      }
+      .mind::before {
+        content: "";
+        position: absolute;
+        left: -1px;
+        bottom: -7px;
+        width: 13px;
+        height: 13px;
+        background: #fff;
+        border-right: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+        border-radius: 0 0 4px 0;
+        transform: rotate(45deg) skew(-6deg, -6deg);
+      }
+      .mind .who {
+        display: block;
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--muted);
+        margin-bottom: 3px;
+      }
+      .btn-share {
+        background: #fff;
+        color: var(--ink);
+        border: 1.5px solid var(--line);
+        box-shadow: var(--shadow-soft);
+      }
+      .btn-share:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-hard);
+      }
+      .footer .btn-share {
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border-color: rgba(255, 255, 255, 0.2);
+      }
+      .li {
+        align-items: flex-start;
+        padding: 16px 0;
+      }
+      .li-txt {
+        display: block;
+      }
+      .li-txt b {
+        display: block;
+        font-size: 16px;
+        font-weight: 800;
+        color: var(--ink);
+        line-height: 1.4;
+        margin-bottom: 5px;
+      }
+      .li-txt em {
+        display: block;
+        font-style: normal;
+        font-size: 14.5px;
+        font-weight: 500;
+        color: var(--muted);
+        line-height: 1.62;
+      }
+      .li.neg .li-txt b {
+        color: #b8352b;
+      }
+      .li .mk {
+        margin-top: 2px;
+      }
+    </style>
+    <script type="module">
+      import * as amplitude from "@amplitude/unified";
+
+      amplitude.initAll("443e2f2346af3020b968ec700280a15b", {
+        analytics: { autocapture: true },
+        sessionReplay: { sampleRate: 1 },
+      });
+      window.workDnaAmplitude = amplitude;
+    </script>
+  </head>
+  <body>
+    <!-- ============ NAV ============ -->
+    <nav class="nav" id="nav">
+      <a class="brand" href="#top">
+        <svg class="helix" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M6 3c0 6 12 6 12 12M18 3c0 6-12 6-12 12"
+            stroke="#FFD43B"
+            stroke-width="2.2"
+            stroke-linecap="round"
+          />
+          <path
+            d="M7 6h10M7 18h10M8.5 9.5h7M8.5 14.5h7"
+            stroke="#fff"
+            stroke-width="1.6"
+            stroke-linecap="round"
+          />
+        </svg>
+        WORK <b>DNA</b>
+      </a>
+      <button class="nav-cta" onclick="openIntro()">테스트 시작하기</button>
+    </nav>
+
+    <span id="top"></span>
+
+    <!-- ============ HERO ============ -->
+    <header class="hero">
+      <div class="hero-grain"></div>
+      <div class="wrap">
+        <div class="hero-copy">
+          <span class="eyebrow on-dark"
+            ><i class="dot"></i>사장님 운영 유형 테스트</span
+          >
+          <h1 class="hero-title">WORK<br /><span class="dna">DNA</span></h1>
+          <p class="hero-sub">일할 때 나타나는 숨은 나 찾기</p>
+          <p class="hero-desc">
+            당신의 운영 스타일을 분석하고<br />어떤 직원과 최고의 팀을 만드는지
+            알려드립니다.
+          </p>
+          <div class="hero-cta">
+            <button class="btn btn-primary" onclick="openIntro()">
+              테스트 시작하기
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M5 12h14M13 6l6 6-6 6"
+                  stroke="currentColor"
+                  stroke-width="2.4"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="hero-badges">
+            <span class="hb"
+              ><svg viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M12 2l2.4 6.9H22l-5.9 4.3 2.3 7L12 16l-6.4 4.2 2.3-7L2 8.9h7.6L12 2z"
+                  fill="currentColor"
+                /></svg
+              >8가지 동물 유형</span
+            >
+            <span class="hb"
+              ><svg viewBox="0 0 24 24" fill="none">
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="9"
+                  stroke="currentColor"
+                  stroke-width="2"
+                />
+                <path
+                  d="M12 7v5l3 2"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                /></svg
+              >약 90초 소요</span
+            >
+            <span class="hb"
+              ><svg viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M4 12a8 8 0 1116 0 8 8 0 01-16 0z"
+                  stroke="currentColor"
+                  stroke-width="2"
+                />
+                <path
+                  d="M8 12l2.5 2.5L16 9"
+                  stroke="currentColor"
+                  stroke-width="2.2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                /></svg
+              >직원 궁합 진단</span
+            >
+          </div>
+        </div>
+
+        <!-- Mascot stage -->
+        <div class="stage" aria-hidden="true">
+          <div class="spotlight"></div>
+          <div class="glow"></div>
+          <span class="note n1">♪</span><span class="note n2">♫</span
+          ><span class="note n3">♪</span>
+          <svg
+            class="mascot"
+            viewBox="0 0 320 400"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <defs>
+              <linearGradient id="fur" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#9A6532" />
+                <stop offset="1" stop-color="#6E451F" />
+              </linearGradient>
+              <linearGradient id="furArm" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#8A5A2C" />
+                <stop offset="1" stop-color="#5F3A1A" />
+              </linearGradient>
+              <linearGradient id="muzzle" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#E6C79A" />
+                <stop offset="1" stop-color="#CBA268" />
+              </linearGradient>
+              <linearGradient id="shirtG" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#3B78E8" />
+                <stop offset="1" stop-color="#1B50BE" />
+              </linearGradient>
+              <linearGradient id="pantsG" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#2A2A36" />
+                <stop offset="1" stop-color="#14141C" />
+              </linearGradient>
+              <linearGradient id="shoeG" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#FFFFFF" />
+                <stop offset="1" stop-color="#D5D6DE" />
+              </linearGradient>
+              <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#26262F" />
+                <stop offset="1" stop-color="#0A0A10" />
+              </linearGradient>
+            </defs>
+
+            <!-- ground shadow -->
+            <ellipse
+              cx="158"
+              cy="380"
+              rx="84"
+              ry="14"
+              fill="#000"
+              opacity=".28"
+            />
+
+            <!-- legs + sneakers (both feet planted, slight stagger) -->
+            <g>
+              <path
+                d="M136 250 q-8 46 -8 86 q0 8 9 8 h16 q9 0 8-9 q-2-44 2-85 z"
+                fill="url(#pantsG)"
+              />
+              <path
+                d="M170 250 q-2 44 6 88 q1 8 10 7 h15 q9-1 7-10 q-6-44 -6-83 z"
+                fill="url(#pantsG)"
+              />
+              <path
+                d="M110 342 q-6 4 -6 12 q0 8 11 9 q26 3 41-1 q7-1 6-10 l-1-13 q-28 6 -55 -6 z"
+                fill="url(#shoeG)"
+              />
+              <path
+                d="M105 357 q6 6 26 7 q22 1 35-2"
+                stroke="#c4c5ce"
+                stroke-width="3.5"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <path
+                d="M172 346 q28 6 56 -4 q7-1 7 10 q-1 9 -8 11 q-16 3 -45 1 q-11-1 -11-9 z"
+                fill="url(#shoeG)"
+              />
+              <path
+                d="M179 361 q12 5 34 4 q16-1 22-3"
+                stroke="#c4c5ce"
+                stroke-width="3.5"
+                fill="none"
+                stroke-linecap="round"
+              />
+            </g>
+
+            <!-- torso: blue shirt -->
+            <path
+              d="M108 214 q52 30 104 0 q16 44 6 86 q-58 26 -116 0 q-10-42 6-86 z"
+              fill="url(#shirtG)"
+            />
+            <path d="M150 214 l10 20 l10-20 z" fill="#0f3a94" />
+            <path
+              d="M150 214 l-14 12M170 214 l14 12"
+              stroke="#1a4bb0"
+              stroke-width="7"
+              stroke-linecap="round"
+            />
+            <path
+              d="M160 236 v60"
+              stroke="#123f9e"
+              stroke-width="3"
+              opacity=".7"
+            />
+            <circle cx="160" cy="252" r="2.6" fill="#cfe0ff" />
+            <circle cx="160" cy="270" r="2.6" fill="#cfe0ff" />
+            <circle cx="160" cy="288" r="2.6" fill="#cfe0ff" />
+            <path
+              d="M120 226 q-6 34 2 66"
+              stroke="#5b93f5"
+              stroke-width="6"
+              fill="none"
+              stroke-linecap="round"
+              opacity=".45"
+            />
+
+            <!-- LEFT arm held across chest = wrist target -->
+            <g class="arm-hold">
+              <path
+                d="M114 224 Q126 254 166 250"
+                fill="none"
+                stroke="url(#furArm)"
+                stroke-width="24"
+                stroke-linecap="round"
+              />
+              <circle cx="166" cy="250" r="13" fill="url(#furArm)" />
+            </g>
+            <!-- tap pulse rings at inner wrist -->
+            <circle
+              class="tap-ring"
+              cx="151"
+              cy="250"
+              r="9"
+              fill="none"
+              stroke="#FFD43B"
+              stroke-width="3"
+            />
+            <!-- RIGHT arm points + taps the wrist twice (animated) -->
+            <g class="arm-tap">
+              <path
+                d="M212 224 Q214 250 182 250"
+                fill="none"
+                stroke="url(#furArm)"
+                stroke-width="22"
+                stroke-linecap="round"
+              />
+              <circle cx="182" cy="250" r="12" fill="url(#furArm)" />
+              <path
+                d="M173 250 H151"
+                stroke="url(#muzzle)"
+                stroke-width="8"
+                stroke-linecap="round"
+              />
+            </g>
+
+            <!-- head -->
+            <g class="head">
+              <circle cx="104" cy="96" r="26" fill="url(#fur)" />
+              <circle cx="216" cy="96" r="26" fill="url(#fur)" />
+              <circle cx="104" cy="96" r="12" fill="#5c3a1c" />
+              <circle cx="216" cy="96" r="12" fill="#5c3a1c" />
+              <circle cx="160" cy="150" r="88" fill="url(#fur)" />
+              <ellipse cx="160" cy="182" rx="60" ry="50" fill="url(#muzzle)" />
+              <rect
+                x="86"
+                y="132"
+                width="148"
+                height="9"
+                rx="4.5"
+                fill="url(#glass)"
+              />
+              <path
+                d="M92 132 h56 a11 11 0 0 1 11 11 v9 a22 22 0 0 1 -44 5 l-20-17 a9 9 0 0 1 0-9z"
+                fill="url(#glass)"
+              />
+              <path
+                d="M228 132 h-56 a11 11 0 0 0 -11 11 v9 a22 22 0 0 0 44 5 l20-17 a9 9 0 0 0 0-9z"
+                fill="url(#glass)"
+              />
+              <path
+                d="M100 140 l16 12"
+                stroke="#7fa8ff"
+                stroke-width="4"
+                stroke-linecap="round"
+                opacity=".7"
+              />
+              <path
+                d="M176 140 l16 12"
+                stroke="#7fa8ff"
+                stroke-width="4"
+                stroke-linecap="round"
+                opacity=".7"
+              />
+              <ellipse cx="160" cy="182" rx="13" ry="9" fill="#2c1a0e" />
+              <path
+                d="M160 191 v7"
+                stroke="#2c1a0e"
+                stroke-width="3"
+                stroke-linecap="round"
+              />
+              <path
+                d="M140 202 q20 18 42 2"
+                stroke="#2c1a0e"
+                stroke-width="4"
+                fill="none"
+                stroke-linecap="round"
+              />
+            </g>
+          </svg>
+        </div>
+      </div>
+    </header>
+
+    <!-- ============ MARQUEE ============ -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span
+          >운영스타일 분석 ✦ 직원 궁합 추천 ✦ 갈등 포인트 진단 ✦ 팀 궁합 점수 ✦
+          SNS 공유 카드 ✦
+        </span>
+        <span
+          >운영스타일 분석 ✦ 직원 궁합 추천 ✦ 갈등 포인트 진단 ✦ 팀 궁합 점수 ✦
+          SNS 공유 카드 ✦
+        </span>
+      </div>
+    </div>
+
+    <!-- ============ FEATURES ============ -->
+    <section class="section features" id="features">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow"><i class="dot"></i>What you get</span>
+          <h2>테스트 하나로<br />우리 가게 팀워크가 보입니다</h2>
+          <p>
+            90초면 충분해요. 사장님의 운영 DNA부터 최고의 직원 조합까지 한 번에
+            진단합니다.
+          </p>
+        </div>
+        <div class="feat-grid">
+          <div class="feat">
+            <span class="idx">01</span>
+            <div class="feat-ic">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M4 20V10M10 20V4M16 20v-7M22 20H2"
+                  stroke="currentColor"
+                  stroke-width="2.2"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </div>
+            <h3>운영 스타일 분석</h3>
+            <p>
+              추진력·전략·소통·안정 등 6개 축으로 사장님의 일하는 방식을
+              데이터로 풀어드려요.
+            </p>
+          </div>
+          <div class="feat">
+            <span class="idx">02</span>
+            <div class="feat-ic">
+              <svg viewBox="0 0 24 24" fill="none">
+                <circle
+                  cx="9"
+                  cy="8"
+                  r="3.4"
+                  stroke="currentColor"
+                  stroke-width="2"
+                />
+                <circle
+                  cx="17"
+                  cy="10"
+                  r="2.6"
+                  stroke="currentColor"
+                  stroke-width="2"
+                />
+                <path
+                  d="M3 19c0-3 3-5 6-5s6 2 6 5M15 19c0-2 2-3.4 4-3.4"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </div>
+            <h3>직원 궁합 추천</h3>
+            <p>
+              어떤 성향의 직원과 붙였을 때 시너지가 폭발하는지, 이상적인 파트너
+              유형을 짚어줍니다.
+            </p>
+          </div>
+          <div class="feat">
+            <span class="idx">03</span>
+            <div class="feat-ic">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M12 3l9 16H3l9-16z"
+                  stroke="currentColor"
+                  stroke-width="2.2"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M12 10v4M12 17h.01"
+                  stroke="currentColor"
+                  stroke-width="2.4"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </div>
+            <h3>갈등 포인트 진단</h3>
+            <p>
+              부딪히기 쉬운 성향과 그 이유까지. 미리 알면 피할 수 있는 팀
+              리스크를 알려드려요.
+            </p>
+          </div>
+          <div class="feat">
+            <span class="idx">04</span>
+            <div class="feat-ic">
+              <svg viewBox="0 0 24 24" fill="none">
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="9"
+                  stroke="currentColor"
+                  stroke-width="2"
+                />
+                <path
+                  d="M12 12l4-4M12 12l-3 3"
+                  stroke="currentColor"
+                  stroke-width="2.2"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </div>
+            <h3>팀 궁합 점수</h3>
+            <p>
+              지금 조합의 팀 시너지를 점수로 확인. 채용과 배치를 감이 아닌
+              근거로 결정하세요.
+            </p>
+          </div>
+          <div class="feat">
+            <span class="idx">05</span>
+            <div class="feat-ic">
+              <svg viewBox="0 0 24 24" fill="none">
+                <rect
+                  x="4"
+                  y="4"
+                  width="16"
+                  height="16"
+                  rx="4"
+                  stroke="currentColor"
+                  stroke-width="2"
+                />
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="3.4"
+                  stroke="currentColor"
+                  stroke-width="2"
+                />
+                <circle cx="16.5" cy="7.5" r="1.2" fill="currentColor" />
+              </svg>
+            </div>
+            <h3>SNS 공유 카드</h3>
+            <p>
+              결과를 인스타그램 감성 카드로 바로 저장. 직원·동료와 공유하며 팀
+              궁합을 확인해요.
+            </p>
+          </div>
+          <div
+            class="feat"
+            style="
+              display: grid;
+              place-content: center;
+              background: linear-gradient(
+                140deg,
+                var(--purple),
+                var(--purple-deep)
+              );
+              color: #fff;
+              box-shadow: var(--shadow-hard);
+            "
+          >
+            <h3 style="font-size: 22px; margin-bottom: 12px">준비되셨나요?</h3>
+            <button
+              class="btn btn-primary"
+              style="font-size: 15px; padding: 13px 22px"
+              onclick="openIntro()"
+            >
+              지금 시작하기
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ INTRO FORM ============ -->
+    <div
+      class="intro-form"
+      id="introForm"
+      role="dialog"
+      aria-modal="true"
+      aria-label="시작 전 정보 입력"
+    >
+      <div class="if-top">
+        <button class="quiz-close" onclick="closeIntro()" aria-label="닫기">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path
+              d="M6 6l12 12M18 6L6 18"
+              stroke="currentColor"
+              stroke-width="2.4"
+              stroke-linecap="round"
+            />
+          </svg>
+        </button>
+      </div>
+      <div class="if-body">
+        <span class="q-stage">시작 전에</span>
+        <h2 class="if-title">사장님, 잠깐만요!</h2>
+        <p class="if-sub">
+          결과를 사장님께 맞춰 보여드릴게요.<br />30초면 충분해요.
+        </p>
+
+        <div class="if-card">
+          <div class="if-field">
+            <label for="fName">닉네임 <em class="req">필수</em></label>
+            <input
+              id="fName"
+              type="text"
+              maxlength="12"
+              placeholder="예) 수댕이사장"
+              autocomplete="nickname"
+            />
+            <p class="if-err" id="fNameErr">닉네임을 입력해 주세요</p>
+          </div>
+
+          <div class="if-field">
+            <label for="fShop">가게 이름</label>
+            <input
+              id="fShop"
+              type="text"
+              maxlength="20"
+              placeholder="예) 팩터치킨 동구점"
+              autocomplete="organization"
+            />
+          </div>
+
+          <div class="if-field">
+            <label>성별</label>
+            <div class="if-chips" id="fGender">
+              <button type="button" class="chip-opt" data-v="남성">남성</button>
+              <button type="button" class="chip-opt" data-v="여성">여성</button>
+              <button type="button" class="chip-opt" data-v="선택안함">
+                선택 안 함
+              </button>
+            </div>
+          </div>
+
+          <div class="if-field">
+            <label>연령대</label>
+            <div class="if-chips" id="fAge">
+              <button type="button" class="chip-opt" data-v="20대">20대</button>
+              <button type="button" class="chip-opt" data-v="30대">30대</button>
+              <button type="button" class="chip-opt" data-v="40대">40대</button>
+              <button type="button" class="chip-opt" data-v="50대">50대</button>
+              <button type="button" class="chip-opt" data-v="60대 이상">
+                60대 이상
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn btn-primary if-go" onclick="submitIntro()">
+          테스트 시작하기
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path
+              d="M5 12h14M13 6l6 6-6 6"
+              stroke="currentColor"
+              stroke-width="2.4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+        <p class="if-note">
+          입력하신 정보는 결과를 보여드리는 데만 쓰이고, 어디에도 저장되지
+          않아요.
+        </p>
+      </div>
+    </div>
+
+    <!-- ============ QUIZ OVERLAY ============ -->
+    <div
+      class="quiz"
+      id="quiz"
+      role="dialog"
+      aria-modal="true"
+      aria-label="WORK DNA 테스트"
+    >
+      <div class="quiz-top">
+        <div class="q-count"><b id="qNow">1</b> / 15</div>
+        <button class="quiz-close" onclick="closeQuiz()" aria-label="닫기">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path
+              d="M6 6l12 12M18 6L6 18"
+              stroke="currentColor"
+              stroke-width="2.4"
+              stroke-linecap="round"
+            />
+          </svg>
+        </button>
+      </div>
+      <div class="progress-shell">
+        <div class="progress-bar" id="qBar"></div>
+      </div>
+      <div class="quiz-body">
+        <span class="q-stage" id="qStage">질문 1</span>
+        <div class="q-text" id="qText"></div>
+        <div class="q-options" id="qOptions"></div>
+      </div>
+      <div class="quiz-foot">
+        <button class="q-back" id="qBack" onclick="prevQ()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path
+              d="M15 6l-6 6 6 6"
+              stroke="currentColor"
+              stroke-width="2.4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            /></svg
+          >이전 질문
+        </button>
+        <div class="helix-strip" id="helixStrip"></div>
+      </div>
+
+      <!-- calculating loader -->
+      <div class="calc" id="calc">
+        <div class="dna-spin">
+          <i style="animation-delay: 0s"></i
+          ><i style="animation-delay: -0.2s"></i
+          ><i style="animation-delay: -0.4s"></i>
+          <i style="animation-delay: -0.6s"></i
+          ><i style="animation-delay: -0.8s"></i
+          ><i style="animation-delay: -1s"></i>
+        </div>
+        <div class="calc-txt">DNA 분석 중…</div>
+        <div class="calc-sub">사장님의 운영 유형을 해독하고 있어요</div>
+      </div>
+    </div>
+
+    <!-- ============ RESULT OVERLAY ============ -->
+    <div
+      class="result"
+      id="result"
+      role="dialog"
+      aria-modal="true"
+      aria-label="테스트 결과"
+    >
+      <button class="res-close" onclick="closeResult()" aria-label="닫기">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M6 6l12 12M18 6L6 18"
+            stroke="currentColor"
+            stroke-width="2.4"
+            stroke-linecap="round"
+          />
+        </svg>
+      </button>
+      <div class="res-hero">
+        <span class="res-tag" id="rTag">당신의 WORK DNA</span>
+        <div class="res-emoji" id="rEmoji">🦦</div>
+        <h1 class="res-name" id="rName">자유냥</h1>
+        <p class="res-onel" id="rOne"></p>
+      </div>
+      <div class="res-body">
+        <div class="res-grid">
+          <div class="panel full">
+            <h4 id="rWhoHead">🧬 사장님은…</h4>
+            <div class="sub-head">💪 강점</div>
+            <div id="rStrengths"></div>
+            <div class="sub-head neg">⚠️ 보완점</div>
+            <div id="rWeak"></div>
+            <div class="mind-box">
+              <div class="mind-head">💬 직원의 속마음</div>
+              <div id="rMind"></div>
+            </div>
+          </div>
+
+          <div class="panel full">
+            <h4>🧬 운영 스타일 레이더</h4>
+            <div class="radar-wrap">
+              <div id="radarBox"></div>
+              <div
+                id="radarLegend"
+                style="
+                  font-weight: 600;
+                  font-size: 14px;
+                  color: var(--muted);
+                  line-height: 2;
+                "
+              ></div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h4>🤝 이상적인 직원</h4>
+            <div id="rIdeal"></div>
+          </div>
+          <div class="panel">
+            <h4 class="neg">🔥 갈등 주의 직원</h4>
+            <div id="rConflict"></div>
+          </div>
+        </div>
+
+        <div class="res-actions">
+          <button class="btn btn-primary" onclick="shareLink(this)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <circle
+                cx="18"
+                cy="5"
+                r="2.6"
+                stroke="currentColor"
+                stroke-width="2"
+              />
+              <circle
+                cx="6"
+                cy="12"
+                r="2.6"
+                stroke="currentColor"
+                stroke-width="2"
+              />
+              <circle
+                cx="18"
+                cy="19"
+                r="2.6"
+                stroke="currentColor"
+                stroke-width="2"
+              />
+              <path
+                d="M8.4 10.8l7.2-4.2M8.4 13.2l7.2 4.2"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+            직원에게 공유하기
+          </button>
+          <button class="btn btn-dark" onclick="restart()">
+            다시 테스트하기
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="footer">
+      <div class="wrap">
+        <span class="eyebrow on-dark" style="margin-bottom: 18px"
+          ><i class="dot"></i>Team up</span
+        >
+        <h2>
+          직원과 함께 테스트하고<br /><span class="em">우리 팀 궁합</span>을
+          확인해보세요
+        </h2>
+        <button class="btn btn-primary" onclick="shareLink(this)">
+          직원에게 공유하기
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <circle
+              cx="18"
+              cy="5"
+              r="2.6"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <circle
+              cx="6"
+              cy="12"
+              r="2.6"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <circle
+              cx="18"
+              cy="19"
+              r="2.6"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <path
+              d="M8.4 10.8l7.2-4.2M8.4 13.2l7.2 4.2"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+        </button>
+        <div class="footer-brand">
+          <span class="brand"
+            ><svg class="helix" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M6 3c0 6 12 6 12 12M18 3c0 6-12 6-12 12"
+                stroke="#FFD43B"
+                stroke-width="2.2"
+                stroke-linecap="round"
+              />
+              <path
+                d="M7 6h10M7 18h10M8.5 9.5h7M8.5 14.5h7"
+                stroke="#fff"
+                stroke-width="1.6"
+                stroke-linecap="round"
+              /></svg
+            >WORK <b style="color: var(--yellow)">DNA</b></span
+          >
+          <span>사장님을 위한 운영 유형 진단 · 재미로 보는 테스트예요</span>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      /* ================= DATA ================= */
+      const AXES = ["추진력", "전략", "소통", "안정", "꼼꼼함", "리더십"];
+      const TYPES = {
+        tiger: {
+          key: "tiger",
+          emoji: "🐯",
+          name: "추진호랑이",
+          tc: "#FF6B4A",
+          one: "목표가 보이면 일단 달린다, 속도의 사장",
+          desc: "결정이 빠르고 밀어붙이는 힘이 최고",
+          radar: [95, 70, 60, 45, 40, 90],
+          strengths: [
+            "결정이 빠르고, 그 결정을 끝까지 밀고 갑니다|||고민만 하다 시기를 놓치는 일이 거의 없어요. 해야 한다고 판단하면 그날 바로 움직이는 편이라, 남들이 회의만 하고 있을 때 사장님은 이미 결과를 보고 있습니다.",
+            "위기 상황에서 가장 강해집니다|||매출이 꺾이거나 급한 일이 터졌을 때, 흔들리는 대신 오히려 액셀을 밟는 타입이에요. 이때 팀이 사장님을 보고 안정을 찾습니다.",
+            '목표를 정하면 팀 전체를 그 방향으로 끌고 갑니다|||혼자 앞서가는 게 아니라 방향을 만들어내는 힘이 있어요. 사장님이 "이거 하자"고 하면 매장 전체의 우선순위가 정리됩니다.',
+          ],
+          weak: [
+            "속도를 내다가 디테일이 새어 나갑니다|||빠르게 실행하는 만큼 검토가 얕아질 때가 있어요. 나중에 재고·정산·컴플레인 같은 곳에서 뒤늦게 비용으로 돌아오는 경우가 생깁니다.",
+            "직원이 사장님 속도를 따라가지 못합니다|||사장님에겐 당연한 속도가 직원에겐 숨 가쁜 속도예요. 따라오지 못하는 게 아니라 지쳐가는 중일 수 있는데, 겉으로는 잘 안 보입니다.",
+            '"왜"를 설명하지 않고 "뭘"만 지시하기 쉽습니다|||사장님 머릿속엔 이유가 다 있지만, 직원은 지시만 받습니다. 이유를 모르면 시키는 것만 하게 되고, 스스로 판단하는 직원이 안 자라요.',
+          ],
+          mind: [
+            '"사장님, 저 아직 어제 일도 안 끝났는데요…"',
+            '"방향은 알겠는데, 왜 그렇게 가는지는 안 알려주세요."',
+            '"칭찬 한 번만 해주시면 더 뛸 수 있을 것 같아요."',
+            '"가끔은 좀 천천히 가도 괜찮지 않을까요?"',
+          ],
+          ideal: ["squirrel", "owl"],
+          conflict: ["tiger", "bear"],
+          team: 90,
+          teamDesc:
+            "꼼꼼히 뒤를 받쳐줄 직원만 붙으면 폭발적인 성장이 가능한 팀입니다.",
+        },
+        otter: {
+          key: "otter",
+          emoji: "🐱",
+          name: "자유냥",
+          tc: "#5B2EFF",
+          one: "규칙보다 감각, 마이웨이로 움직이는 자유형 사장",
+          desc: "자유로움과 감각으로 분위기를 이끎",
+          radar: [70, 55, 95, 60, 45, 75],
+          strengths: [
+            "규칙보다 감각으로 판단하고, 그게 잘 맞습니다|||매뉴얼에 없는 상황에서도 유연하게 대응해요. 손님 응대나 갑작스러운 변수 앞에서 딱딱하지 않게 풀어내는 감각이 있습니다.",
+            "매장 분위기를 사장님이 만듭니다|||사장님 컨디션이 좋은 날은 매장 전체가 밝아져요. 직원도 손님도 그 에너지를 느끼고, 그게 재방문으로 이어지는 경우가 많습니다.",
+            "사람과 빠르게 가까워집니다|||손님이든 직원이든 벽을 두지 않아요. 딱딱한 사장-직원 관계가 아니라 편하게 말을 걸 수 있는 사이를 만드는 게 사장님의 큰 자산입니다.",
+          ],
+          weak: [
+            "사장님 기분이 매장 운영의 변수가 됩니다|||좋을 땐 최고지만, 안 좋은 날은 직원이 눈치부터 봅니다. 일관성이 없으면 직원은 일보다 사장님 컨디션을 먼저 살피게 돼요.",
+            '기록과 관리가 뒤로 밀립니다|||감으로 잘 굴러가다 보니 숫자를 안 보게 돼요. 그러다 어느 순간 "왜 남는 게 없지?" 하는 시점이 옵니다.',
+            "즉흥적으로 방향을 바꿉니다|||사장님은 더 좋은 생각이 나서 바꾼 건데, 직원 입장에선 하던 걸 처음부터 다시 하는 일이 됩니다. 이게 반복되면 직원이 지쳐요.",
+          ],
+          mind: [
+            '"오늘은 기분이 좋으신가… 눈치부터 보게 돼요."',
+            '"분위기는 좋은데, 일 처리 기준은 좀 명확했으면."',
+            '"재밌긴 한데 마감은 지켜야 하잖아요…"',
+            '"즉흥적으로 바뀌면 저희는 다시 처음부터예요."',
+          ],
+          ideal: ["fox", "owl"],
+          conflict: ["otter", "squirrel"],
+          team: 88,
+          teamDesc:
+            "전략과 관리를 맡을 직원과 만나면 분위기와 성과를 모두 잡는 팀이 됩니다.",
+        },
+        fox: {
+          key: "fox",
+          emoji: "🦊",
+          name: "전략여우",
+          tc: "#FF9F1C",
+          one: "수를 읽고 움직이는 영리한 전략가",
+          desc: "분석과 계획으로 한 수 앞을 내다봄",
+          radar: [65, 95, 65, 60, 80, 70],
+          strengths: [
+            "숫자와 흐름을 읽고 한 수 앞을 봅니다|||감이 아니라 근거로 판단해요. 어떤 메뉴가 왜 팔리는지, 어느 시간대가 왜 비는지를 짚어내니까 낭비되는 돈과 시간이 적습니다.",
+            "자원을 효율적으로 배분합니다|||같은 인건비, 같은 재료비로 더 나은 결과를 만들어냅니다. 무작정 더 쓰는 게 아니라 어디에 써야 효과가 나는지를 알아요.",
+            "경쟁 상황에서 영리한 답을 찾습니다|||옆 가게가 가격을 내려도 따라 내리지 않아요. 우리가 이길 수 있는 다른 판을 찾아내는 게 사장님의 강점입니다.",
+          ],
+          weak: [
+            "계획이 길어지고 실행이 늦어집니다|||완벽한 그림이 그려질 때까지 기다리다 타이밍을 놓치는 경우가 있어요. 시장은 사장님의 계획이 끝나길 기다려주지 않습니다.",
+            "머릿속 전략을 직원과 공유하지 않습니다|||사장님에겐 다 연결된 그림이지만 직원에겐 조각난 지시일 뿐이에요. 큰 그림을 모르면 직원은 왜 이걸 하는지 모른 채 움직입니다.",
+            "사람보다 구조로 문제를 풀려고 합니다|||갈등이 생기면 규칙을 세워 정리하는데, 정작 상한 마음은 그대로 남아 있을 수 있어요. 시스템이 감정까지 해결해주진 않습니다.",
+          ],
+          mind: [
+            '"머릿속에 계획이 있으신 건 아는데, 말씀을 안 해주세요."',
+            '"결정만 조금 빨리 내려주시면 좋겠어요."',
+            '"저희한테도 그 큰 그림 좀 공유해 주세요."',
+            '"완벽하지 않아도 일단 해보면 안 될까요?"',
+          ],
+          ideal: ["tiger", "dolphin"],
+          conflict: ["fox", "bear"],
+          team: 87,
+          teamDesc:
+            "추진력 강한 직원과 짝을 이루면 '전략+실행'의 이상적인 조합이 완성됩니다.",
+        },
+        dog: {
+          key: "dog",
+          emoji: "🐶",
+          name: "리더견",
+          tc: "#4A9DFF",
+          one: "신뢰로 팀을 하나로 묶는 리더",
+          desc: "헌신과 팀워크로 사람을 이끄는 힘",
+          radar: [70, 65, 80, 75, 65, 95],
+          strengths: [
+            "직원이 믿고 따르는 신뢰를 쌓았습니다|||말보다 행동으로 보여주는 타입이라, 궂은일도 먼저 합니다. 직원이 사장님을 위해 한 번 더 움직이는 이유가 여기 있어요.",
+            "팀을 하나로 묶는 힘이 있습니다|||개인기로 굴러가는 매장이 아니라 팀으로 굴러가는 매장을 만듭니다. 사람이 오래 남는 가게가 되는 건 우연이 아니에요.",
+            "사람을 오래 데리고 갑니다|||직원의 사정을 알고, 성장을 기다려줍니다. 채용과 교육에 드는 비용이 계속 새는 가게들과 여기서 크게 차이가 납니다.",
+          ],
+          weak: [
+            "정 때문에 냉정한 결정을 미룹니다|||안 맞는 직원, 정리해야 할 문제를 알면서도 사람이 상할까 봐 미룹니다. 그런데 그 시간만큼 남은 직원들이 부담을 나눠 지고 있어요.",
+            "모두를 챙기다 사장님이 소진됩니다|||다 짊어지고 가다 보니 정작 사장님이 쉬지 못해요. 직원들도 그걸 보고 있고, 사실 걱정하고 있습니다.",
+            "싫은 소리를 미루다 문제가 커집니다|||그때 한마디면 끝날 일을, 분위기를 생각해 넘기다 나중에 큰 문제로 마주하게 됩니다. 피드백은 빠를수록 덜 아파요.",
+          ],
+          mind: [
+            '"사장님 혼자 다 하시다 쓰러지실까 봐 걱정돼요."',
+            '"싫은 소리도 그때그때 해주시는 게 편해요."',
+            '"너무 잘해주셔서 오히려 미안할 때가 있어요."',
+            '"정 때문에 못 자르시는 거, 저희도 알아요."',
+          ],
+          ideal: ["fox", "squirrel"],
+          conflict: ["tiger", "dog"],
+          team: 91,
+          teamDesc:
+            "관리·전략형 직원과 만나면 오래가는 안정적인 조직을 만드는 팀입니다.",
+        },
+        owl: {
+          key: "owl",
+          emoji: "🦉",
+          name: "부엉이",
+          tc: "#8E6BFF",
+          one: "조용히 관찰하고 정확히 짚는 분석가",
+          desc: "신중함과 데이터로 실수를 줄임",
+          radar: [45, 90, 55, 80, 95, 60],
+          strengths: [
+            "실수를 미리 잡아냅니다|||숫자와 디테일을 보는 눈이 있어서, 남들이 지나친 구멍을 먼저 발견합니다. 사고가 터지기 전에 막는 게 사장님의 진짜 실력이에요.",
+            "감정이 아니라 근거로 판단합니다|||화가 나도 데이터를 봅니다. 그래서 사장님의 결정은 나중에 돌아봐도 후회가 적어요.",
+            "조용히 관찰하다 핵심을 짚습니다|||말수는 적지만 매장에서 무슨 일이 벌어지는지 다 보고 있어요. 한마디 할 때 그게 정확히 문제의 중심입니다.",
+          ],
+          weak: [
+            "신중함이 결정 지연으로 이어집니다|||확신이 설 때까지 기다리는 동안, 직원들은 대기 상태로 멈춰 있습니다. 완벽한 판단보다 제때의 판단이 나을 때가 있어요.",
+            "생각을 밖으로 표현하지 않습니다|||사장님은 다 판단하고 계신데, 직원은 사장님이 만족했는지 화났는지도 모릅니다. 표정으로는 안 읽혀요.",
+            "변화와 즉흥 상황에서 스트레스를 받습니다|||예상 밖의 일이 생기면 대응보다 분석이 먼저 나옵니다. 그런데 현장은 지금 당장 답이 필요할 때가 많아요.",
+          ],
+          mind: [
+            '"생각하시는 건 알겠는데, 표현을 안 해주세요."',
+            '"결정이 늦어지면 저희는 대기만 하게 돼요."',
+            '"괜찮다는 건지 아닌 건지 표정으로는 모르겠어요."',
+            '"가끔은 그냥 한번 해보자고 해주세요."',
+          ],
+          ideal: ["tiger", "dolphin"],
+          conflict: ["owl", "otter"],
+          team: 85,
+          teamDesc:
+            "추진력·소통형 직원이 앞에 서면, 뒤에서 정확하게 받쳐주는 든든한 팀이 됩니다.",
+        },
+        bear: {
+          key: "bear",
+          emoji: "🐻",
+          name: "곰사장",
+          tc: "#C77D3A",
+          one: "흔들림 없이 지키는 든든한 버팀목",
+          desc: "안정과 인내로 오래가는 운영",
+          radar: [60, 60, 70, 95, 70, 80],
+          strengths: [
+            "어떤 상황에도 흔들리지 않습니다|||매출이 꺾여도, 직원이 나가도 사장님은 자리를 지킵니다. 이 안정감 하나로 팀이 무너지지 않는 경우가 많아요.",
+            "직원을 품는 그릇이 넓습니다|||실수를 한 번에 몰아세우지 않고 기다려줍니다. 그래서 직원이 사장님 앞에서 솔직해질 수 있어요.",
+            "꾸준함으로 오래가는 매장을 만듭니다|||반짝 성공이 아니라 10년 가는 가게의 체질을 갖고 있습니다. 단골이 쌓이는 건 이 꾸준함의 결과예요.",
+          ],
+          weak: [
+            "변화가 필요한 순간에도 느립니다|||지금까지 잘 됐던 방식을 놓기 어려워합니다. 그런데 손님과 시장은 이미 바뀌고 있고, 그 격차는 조용히 벌어집니다.",
+            '믿어주지만 피드백은 주지 않습니다|||"알아서 잘 하겠지" 하고 맡기는데, 직원은 자기가 잘 하고 있는지를 모릅니다. 믿음은 전달돼야 믿음이 돼요.',
+            "새로운 시도를 미룹니다|||리스크가 보이면 일단 보류하는데, 안 하는 것도 리스크입니다. 아무것도 안 바꾼 채로 버티는 게 가장 위험한 선택일 때가 있어요.",
+          ],
+          mind: [
+            '"새로운 것도 한 번쯤 시도해보면 좋겠어요."',
+            '"믿어주시는 건 좋은데, 피드백은 좀 주세요."',
+            '"이 방식이 정말 지금도 맞는 걸까요?"',
+            '"변화가 필요할 때는 빨리 움직였으면 해요."',
+          ],
+          ideal: ["dolphin", "fox"],
+          conflict: ["tiger", "bear"],
+          team: 86,
+          teamDesc:
+            "트렌드·전략형 직원과 만나면 '안정 위의 성장'을 만드는 균형 잡힌 팀입니다.",
+        },
+        squirrel: {
+          key: "squirrel",
+          emoji: "🐿",
+          name: "다람쥐",
+          tc: "#34C759",
+          one: "빈틈없이 챙기는 꼼꼼함의 달인",
+          desc: "준비성과 절약으로 살림을 챙김",
+          radar: [55, 70, 60, 75, 95, 55],
+          strengths: [
+            '재고·비용·기록을 빈틈없이 관리합니다|||어디서 얼마가 새는지 사장님은 알고 있습니다. 남들이 "그냥 그런가 보다" 하고 넘기는 돈을 사장님은 잡아내요.',
+            "미리 준비해서 위기를 넘깁니다|||갑작스러운 일이 터져도 사장님 매장은 대비가 돼 있습니다. 운이 좋은 게 아니라 준비해둔 결과예요.",
+            "작은 낭비를 놓치지 않습니다|||한 달에 몇만 원처럼 보이는 게 1년이면 큰돈이라는 걸 알고 있어요. 이 감각이 결국 남는 장사를 만듭니다.",
+          ],
+          weak: [
+            "디테일에 매몰돼 큰 그림을 놓칩니다|||1만 원을 아끼느라 100만 원짜리 기회를 지나칠 수 있어요. 절약은 수단이지 목적이 아닙니다.",
+            "완벽하려다 사장님이 지칩니다|||다 챙기려니 쉬지를 못해요. 그 피로가 쌓이면 결국 판단력이 흐려집니다.",
+            '직원에게도 같은 기준을 요구합니다|||사장님에겐 당연한 꼼꼼함이 직원에겐 과한 요구일 수 있어요. "이것까지 해야 하나" 싶은 순간이 쌓이면 사람이 지칩니다.',
+          ],
+          mind: [
+            '"이것까지 꼭 기록해야 하나 싶을 때가 있어요."',
+            '"디테일도 좋지만 큰 방향도 알려주세요."',
+            '"너무 아끼시다 놓치는 기회도 있는 것 같아요."',
+            '"완벽하지 않아도 괜찮다고 말해주세요."',
+          ],
+          ideal: ["dog", "dolphin"],
+          conflict: ["otter", "squirrel"],
+          team: 84,
+          teamDesc:
+            "리더십·소통형 직원과 만나면 꼼꼼함이 빛을 발하는 탄탄한 팀이 됩니다.",
+        },
+        dolphin: {
+          key: "dolphin",
+          emoji: "🐬",
+          name: "돌고래",
+          tc: "#00B8D9",
+          one: "트렌드를 타고 소통하는 아이디어뱅크",
+          desc: "창의와 유연함으로 새 흐름을 만듦",
+          radar: [65, 75, 90, 55, 55, 65],
+          strengths: [
+            '트렌드를 빠르게 읽고 시도합니다|||남들이 "저게 되겠어?" 할 때 이미 해보고 있습니다. 이 속도가 새로운 손님을 데려오는 통로가 돼요.',
+            "소통과 아이디어로 흐름을 만듭니다|||혼자 생각하지 않고 사람들과 이야기하며 답을 찾습니다. SNS든 매장이든 사장님이 만드는 이야기가 사람을 모아요.",
+            "상황에 맞춰 유연하게 방향을 바꿉니다|||안 되는 걸 붙잡고 있지 않아요. 빠르게 접고 다른 걸 시도하는 회복력이 사장님의 무기입니다.",
+          ],
+          weak: [
+            "시작한 걸 끝내기 전에 다음으로 넘어갑니다|||새 아이디어가 계속 생기다 보니, 지난주에 시작한 게 마무리되지 않은 채 쌓입니다. 직원들은 그걸 다 기억하고 있어요.",
+            "방향이 자주 바뀌어 팀이 헷갈립니다|||사장님에겐 개선이지만 직원에겐 번복입니다. 어디에 맞춰야 할지 모르면 결국 아무것도 안 하게 돼요.",
+            "꾸준한 반복과 관리가 약합니다|||시작은 잘하는데 매일 똑같이 유지하는 걸 지루해합니다. 그런데 장사의 성과는 대부분 그 반복에서 나옵니다.",
+          ],
+          mind: [
+            '"지난주 아이디어는 어떻게 됐나요…?"',
+            '"새로운 거 좋은데, 하나는 끝내고 갔으면 해요."',
+            '"방향이 자꾸 바뀌면 저희는 헷갈려요."',
+            '"재밌지만 정리해주는 사람이 필요해요."',
+          ],
+          ideal: ["owl", "squirrel"],
+          conflict: ["dolphin", "bear"],
+          team: 83,
+          teamDesc:
+            "관리·분석형 직원이 옆에 있으면, 아이디어가 성과로 이어지는 팀이 됩니다.",
+        },
+      };
+      const ORDER = [
+        "tiger",
+        "otter",
+        "fox",
+        "dog",
+        "owl",
+        "bear",
+        "squirrel",
+        "dolphin",
+      ];
+      const CHAR = {
+        tiger: `<svg viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="tgF" cx="0.38" cy="0.3" r="0.8"><stop offset="0" stop-color="#FFB25E"/><stop offset="1" stop-color="#E881310"/></radialGradient><linearGradient id="tgF2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFB964"/><stop offset="1" stop-color="#E07C2C"/></linearGradient></defs><circle cx="42" cy="30" r="14" fill="#E8873A"/><circle cx="98" cy="30" r="14" fill="#E8873A"/><circle cx="42" cy="31" r="6.6" fill="#8A4415"/><circle cx="98" cy="31" r="6.6" fill="#8A4415"/><circle cx="70" cy="58" r="40" fill="url(#tgF2)"/><ellipse cx="70" cy="72" rx="29" ry="24" fill="#FDEFDA"/><path d="M70 22v14M56 25l4 12M84 25l-4 12" stroke="#6B3410" stroke-width="4.6" stroke-linecap="round"/><path d="M34 54h13M33 65h12M106 54h-13M107 65h-12" stroke="#6B3410" stroke-width="4" stroke-linecap="round"/><ellipse cx="56" cy="62" rx="6.888" ry="8.4" fill="#2A1B12"/><ellipse cx="84" cy="62" rx="6.888" ry="8.4" fill="#2A1B12"/><circle cx="58.4" cy="59" r="2.8560000000000003" fill="#fff"/><circle cx="86.4" cy="59" r="2.8560000000000003" fill="#fff"/><circle cx="53.4" cy="65.2" r="1.4280000000000002" fill="#fff" opacity=".75"/><circle cx="81.4" cy="65.2" r="1.4280000000000002" fill="#fff" opacity=".75"/><ellipse cx="43" cy="78" rx="8" ry="5" fill="#FF8A7A" opacity=".38"/><ellipse cx="97" cy="78" rx="8" ry="5" fill="#FF8A7A" opacity=".38"/><path d="M63 72 h14 l-7 6 z" fill="#3A2413"/><path d="M70 78v4 M70 82 q-7 6 -13 2 M70 82 q7 6 13 2" stroke="#6B3410" stroke-width="2.8" fill="none" stroke-linecap="round"/><ellipse cx="52" cy="42" rx="15" ry="9.3" fill="#fff" opacity=".16" transform="rotate(-18 52 42)"/><defs><linearGradient id="jkFF6B4A" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2E3D5C"/><stop offset="1" stop-color="#1E2A42"/></linearGradient></defs><path d="M70 96C44 96 27 112 24 140H116C113 112 96 96 70 96Z" fill="url(#jkFF6B4A)"/><path d="M70 97 L56 108 L70 140 L84 108 Z" fill="#F7F9FD"/><path d="M70 97 L57 107 M70 97 L83 107" stroke="#22304A" stroke-width="5.5" stroke-linecap="round"/><path d="M65 108 h10 l-2 6 h-6 z" fill="#FF6B4A"/><path d="M66.6 114 L70 136 L73.4 114 Z" fill="#FF6B4A"/><path d="M40 112 q-8 12 -9 28" stroke="#000" stroke-width="0" fill="none"/><ellipse cx="70" cy="99" rx="16" ry="4" fill="#000" opacity=".12"/></svg>`,
+        otter: `<svg viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="ctF" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#E2E4EC"/></linearGradient></defs><path d="M36 40 L38 14 L58 32 Z" fill="#F2F3F7"/><path d="M104 40 L102 14 L82 32 Z" fill="#F2F3F7"/><path d="M40 37 L41 21 L54 33 Z" fill="#F2B6C6"/><path d="M100 37 L99 21 L86 33 Z" fill="#F2B6C6"/><circle cx="70" cy="58" r="40" fill="url(#ctF)"/><rect x="38" y="30" width="64" height="8" rx="4" fill="#1B1B24"/><path d="M40 30 h24 a5 5 0 0 1 5 5 v3 a10 10 0 0 1 -20 1 l-11 -6 a4 4 0 0 1 2 -3z" fill="#23232E"/><path d="M100 30 h-24 a5 5 0 0 0 -5 5 v3 a10 10 0 0 0 20 1 l11 -6 a4 4 0 0 0 -2 -3z" fill="#23232E"/><ellipse cx="56" cy="64" rx="6.723999999999999" ry="8.2" fill="#3B3B46"/><ellipse cx="84" cy="64" rx="6.723999999999999" ry="8.2" fill="#3B3B46"/><circle cx="58.4" cy="61" r="2.788" fill="#fff"/><circle cx="86.4" cy="61" r="2.788" fill="#fff"/><circle cx="53.4" cy="67.2" r="1.394" fill="#fff" opacity=".75"/><circle cx="81.4" cy="67.2" r="1.394" fill="#fff" opacity=".75"/><ellipse cx="42" cy="78" rx="8" ry="5" fill="#FF8A7A" opacity=".38"/><ellipse cx="98" cy="78" rx="8" ry="5" fill="#FF8A7A" opacity=".38"/><path d="M65 74 q5 5 10 0" fill="none" stroke="#B9863F" stroke-width="0"/><path d="M66 73 h8 l-4 4 z" fill="#F08FA6"/><path d="M70 77v3 M70 80 q-6 5 -11 1 M70 80 q6 5 11 1" stroke="#9A9AA8" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M44 72h-13M45 79h-13M96 72h13M95 79h13" stroke="#C9C9D4" stroke-width="2.2" stroke-linecap="round"/><ellipse cx="52" cy="42" rx="15" ry="9.3" fill="#fff" opacity=".16" transform="rotate(-18 52 42)"/><defs><linearGradient id="jk5B2EFF" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2E3D5C"/><stop offset="1" stop-color="#1E2A42"/></linearGradient></defs><path d="M70 96C44 96 27 112 24 140H116C113 112 96 96 70 96Z" fill="url(#jk5B2EFF)"/><path d="M70 97 L56 108 L70 140 L84 108 Z" fill="#F7F9FD"/><path d="M70 97 L57 107 M70 97 L83 107" stroke="#22304A" stroke-width="5.5" stroke-linecap="round"/><path d="M65 108 h10 l-2 6 h-6 z" fill="#5B2EFF"/><path d="M66.6 114 L70 136 L73.4 114 Z" fill="#5B2EFF"/><path d="M40 112 q-8 12 -9 28" stroke="#000" stroke-width="0" fill="none"/><ellipse cx="70" cy="99" rx="16" ry="4" fill="#000" opacity=".12"/></svg>`,
+        fox: `<svg viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="fxF" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF9F45"/><stop offset="1" stop-color="#E4761D"/></linearGradient></defs><path d="M32 46 L40 12 L58 34 Z" fill="#E4761D"/><path d="M108 46 L100 12 L82 34 Z" fill="#E4761D"/><path d="M36 42 L41 19 L53 34 Z" fill="#40301F"/><path d="M104 42 L99 19 L87 34 Z" fill="#40301F"/><circle cx="70" cy="58" r="39" fill="url(#fxF)"/><path d="M70 56 C55 58 46 74 50 92 L70 102 L90 92 C94 74 85 58 70 56Z" fill="#FCF0DE"/><ellipse cx="70" cy="82" rx="6.6" ry="5" fill="#2A1A10"/><path d="M70 87v5 M70 92 q-6 4 -10 1 M70 92 q6 4 10 1" stroke="#7A4A1C" stroke-width="2.6" fill="none" stroke-linecap="round"/><ellipse cx="56" cy="60" rx="6.231999999999999" ry="7.6" fill="#2A1B12"/><ellipse cx="84" cy="60" rx="6.231999999999999" ry="7.6" fill="#2A1B12"/><circle cx="58.4" cy="57" r="2.584" fill="#fff"/><circle cx="86.4" cy="57" r="2.584" fill="#fff"/><circle cx="53.4" cy="63.2" r="1.292" fill="#fff" opacity=".75"/><circle cx="81.4" cy="63.2" r="1.292" fill="#fff" opacity=".75"/><circle cx="56" cy="60" r="12" fill="none" stroke="#2C2C36" stroke-width="3.4" opacity=".92"/><circle cx="84" cy="60" r="12" fill="none" stroke="#2C2C36" stroke-width="3.4" opacity=".92"/><path d="M68 60h4" stroke="#2C2C36" stroke-width="3.4"/><path d="M44 58 l-9 -3" stroke="#2C2C36" stroke-width="3.2" stroke-linecap="round"/><path d="M96 58 l9 -3" stroke="#2C2C36" stroke-width="3.2" stroke-linecap="round"/><circle cx="51" cy="55" r="4" fill="#fff" opacity=".35"/><ellipse cx="50" cy="40" rx="14" ry="8.68" fill="#fff" opacity=".16" transform="rotate(-18 50 40)"/><defs><linearGradient id="jkFF9F1C" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2E3D5C"/><stop offset="1" stop-color="#1E2A42"/></linearGradient></defs><path d="M70 96C44 96 27 112 24 140H116C113 112 96 96 70 96Z" fill="url(#jkFF9F1C)"/><path d="M70 97 L56 108 L70 140 L84 108 Z" fill="#F7F9FD"/><path d="M70 97 L57 107 M70 97 L83 107" stroke="#22304A" stroke-width="5.5" stroke-linecap="round"/><path d="M65 108 h10 l-2 6 h-6 z" fill="#FF9F1C"/><path d="M66.6 114 L70 136 L73.4 114 Z" fill="#FF9F1C"/><path d="M40 112 q-8 12 -9 28" stroke="#000" stroke-width="0" fill="none"/><ellipse cx="70" cy="99" rx="16" ry="4" fill="#000" opacity=".12"/></svg>`,
+        dog: `<svg viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="dgF" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F0C079"/><stop offset="1" stop-color="#D69A49"/></linearGradient></defs><path d="M36 36 Q30 66 46 78 Q48 48 58 38 Z" fill="#C98C4A"/><path d="M104 36 Q110 66 94 78 Q92 48 82 38 Z" fill="#C98C4A"/><circle cx="70" cy="58" r="39" fill="#EDBB72"/><ellipse cx="70" cy="74" rx="27" ry="22" fill="#FCF2E0"/><ellipse cx="56" cy="60" rx="6.888" ry="8.4" fill="#2A1B12"/><ellipse cx="84" cy="60" rx="6.888" ry="8.4" fill="#2A1B12"/><circle cx="58.4" cy="57" r="2.8560000000000003" fill="#fff"/><circle cx="86.4" cy="57" r="2.8560000000000003" fill="#fff"/><circle cx="53.4" cy="63.2" r="1.4280000000000002" fill="#fff" opacity=".75"/><circle cx="81.4" cy="63.2" r="1.4280000000000002" fill="#fff" opacity=".75"/><ellipse cx="43" cy="78" rx="8" ry="5" fill="#FF8A7A" opacity=".38"/><ellipse cx="97" cy="78" rx="8" ry="5" fill="#FF8A7A" opacity=".38"/><ellipse cx="70" cy="71" rx="7.4" ry="5.6" fill="#2C1A0E"/><path d="M70 77v4 M70 81 q-7 5 -12 1 M70 81 q7 5 12 1" stroke="#8A5A2C" stroke-width="2.8" fill="none" stroke-linecap="round"/><path d="M65 86 q5 8 10 0 z" fill="#F0708A"/><ellipse cx="52" cy="42" rx="15" ry="9.3" fill="#fff" opacity=".16" transform="rotate(-18 52 42)"/><defs><linearGradient id="jk4A9DFF" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2E3D5C"/><stop offset="1" stop-color="#1E2A42"/></linearGradient></defs><path d="M70 96C44 96 27 112 24 140H116C113 112 96 96 70 96Z" fill="url(#jk4A9DFF)"/><path d="M70 97 L56 108 L70 140 L84 108 Z" fill="#F7F9FD"/><path d="M70 97 L57 107 M70 97 L83 107" stroke="#22304A" stroke-width="5.5" stroke-linecap="round"/><path d="M65 108 h10 l-2 6 h-6 z" fill="#4A9DFF"/><path d="M66.6 114 L70 136 L73.4 114 Z" fill="#4A9DFF"/><path d="M40 112 q-8 12 -9 28" stroke="#000" stroke-width="0" fill="none"/><ellipse cx="70" cy="99" rx="16" ry="4" fill="#000" opacity=".12"/><g transform="translate(96,104) rotate(-16)"><rect x="-4" y="0" width="8" height="22" rx="4" fill="#3A3A46"/><circle cx="0" cy="-3" r="8" fill="#5A5A6B"/><circle cx="-2" cy="-5" r="2.4" fill="#9A9AAB"/></g></svg>`,
+        owl: `<svg viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="owF" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A9855E"/><stop offset="1" stop-color="#7E603F"/></linearGradient></defs><path d="M42 24 L34 42 L56 36 Z" fill="#8C6B4A"/><path d="M98 24 L106 42 L84 36 Z" fill="#8C6B4A"/><circle cx="70" cy="60" r="40" fill="url(#owF)"/><path d="M70 32 C50 32 40 52 44 70 54 78 60 74 70 74 80 74 86 78 96 70 100 52 90 32 70 32Z" fill="#EBD8BA"/><circle cx="55" cy="60" r="16" fill="#FFFDF8" stroke="#6E5233" stroke-width="3"/><circle cx="85" cy="60" r="16" fill="#FFFDF8" stroke="#6E5233" stroke-width="3"/><circle cx="55" cy="61" r="7" fill="#2A1A0E"/><circle cx="85" cy="61" r="7" fill="#2A1A0E"/><circle cx="57.4" cy="58.4" r="2.4" fill="#fff"/><circle cx="87.4" cy="58.4" r="2.4" fill="#fff"/><path d="M39 60 h-8M101 60 h8" stroke="#6E5233" stroke-width="3" stroke-linecap="round"/><path d="M70 68 L62 78 L70 84 L78 78 Z" fill="#F2A93B"/><ellipse cx="52" cy="42" rx="15" ry="9.3" fill="#fff" opacity=".16" transform="rotate(-18 52 42)"/><defs><linearGradient id="jk8E6BFF" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2E3D5C"/><stop offset="1" stop-color="#1E2A42"/></linearGradient></defs><path d="M70 96C44 96 27 112 24 140H116C113 112 96 96 70 96Z" fill="url(#jk8E6BFF)"/><path d="M70 97 L56 108 L70 140 L84 108 Z" fill="#F7F9FD"/><path d="M70 97 L57 107 M70 97 L83 107" stroke="#22304A" stroke-width="5.5" stroke-linecap="round"/><path d="M65 108 h10 l-2 6 h-6 z" fill="#8E6BFF"/><path d="M66.6 114 L70 136 L73.4 114 Z" fill="#8E6BFF"/><path d="M40 112 q-8 12 -9 28" stroke="#000" stroke-width="0" fill="none"/><ellipse cx="70" cy="99" rx="16" ry="4" fill="#000" opacity=".12"/></svg>`,
+        bear: `<svg viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="brF" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A87243"/><stop offset="1" stop-color="#7C5027"/></linearGradient></defs><circle cx="40" cy="32" r="15" fill="#8A5E34"/><circle cx="100" cy="32" r="15" fill="#8A5E34"/><circle cx="40" cy="32" r="7" fill="#5C3A1C"/><circle cx="100" cy="32" r="7" fill="#5C3A1C"/><circle cx="70" cy="60" r="40" fill="url(#brF)"/><ellipse cx="70" cy="76" rx="26" ry="21" fill="#E9CBA0"/><rect x="38" y="52" width="64" height="7" rx="3.5" fill="#15151C"/><path d="M40 52 h24 a6 6 0 0 1 6 6 v4 a12 12 0 0 1 -24 2 l-11 -7 a5 5 0 0 1 2 -5z" fill="#1B1B24"/><path d="M100 52 h-24 a6 6 0 0 0 -6 6 v4 a12 12 0 0 0 24 2 l11 -7 a5 5 0 0 0 -2 -5z" fill="#1B1B24"/><path d="M46 56 l10 7" stroke="#7FA8FF" stroke-width="3.4" stroke-linecap="round" opacity=".55"/><path d="M82 56 l10 7" stroke="#7FA8FF" stroke-width="3.4" stroke-linecap="round" opacity=".55"/><ellipse cx="70" cy="74" rx="7.6" ry="5.8" fill="#2C1A0E"/><path d="M70 80v4 M70 84 q-7 5 -12 1 M70 84 q7 5 12 1" stroke="#5B3A1C" stroke-width="2.8" fill="none" stroke-linecap="round"/><ellipse cx="50" cy="40" rx="14" ry="8.68" fill="#fff" opacity=".16" transform="rotate(-18 50 40)"/><defs><linearGradient id="jkC77D3A" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2B6FD6"/><stop offset="1" stop-color="#1B4FA8"/></linearGradient></defs><path d="M70 96C44 96 27 112 24 140H116C113 112 96 96 70 96Z" fill="url(#jkC77D3A)"/><path d="M70 97 L56 108 L70 140 L84 108 Z" fill="#F7F9FD"/><path d="M70 97 L57 107 M70 97 L83 107" stroke="#22304A" stroke-width="5.5" stroke-linecap="round"/><path d="M65 108 h10 l-2 6 h-6 z" fill="#C77D3A"/><path d="M66.6 114 L70 136 L73.4 114 Z" fill="#C77D3A"/><path d="M40 112 q-8 12 -9 28" stroke="#000" stroke-width="0" fill="none"/><ellipse cx="70" cy="99" rx="16" ry="4" fill="#000" opacity=".12"/></svg>`,
+        squirrel: `<svg viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="sqF" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D89250"/><stop offset="1" stop-color="#B06E31"/></linearGradient></defs><path d="M104 82 Q132 58 118 22 Q104 6 90 24 Q110 44 96 74 Z" fill="#B5763F"/><path d="M104 76 Q124 56 114 30 Q104 20 94 32 Q108 48 98 68 Z" fill="#DFA867"/><path d="M40 28 L36 10 L54 26 Z" fill="#B5763F"/><path d="M100 28 L104 10 L86 26 Z" fill="#B5763F"/><circle cx="70" cy="60" r="38" fill="url(#sqF)"/><ellipse cx="52" cy="76" rx="14" ry="11" fill="#F0DBB8"/><ellipse cx="88" cy="76" rx="14" ry="11" fill="#F0DBB8"/><ellipse cx="70" cy="70" rx="18" ry="16" fill="#F8ECD3"/><ellipse cx="56" cy="58" rx="6.56" ry="8" fill="#2A1B12"/><ellipse cx="84" cy="58" rx="6.56" ry="8" fill="#2A1B12"/><circle cx="58.4" cy="55" r="2.72" fill="#fff"/><circle cx="86.4" cy="55" r="2.72" fill="#fff"/><circle cx="53.4" cy="61.2" r="1.36" fill="#fff" opacity=".75"/><circle cx="81.4" cy="61.2" r="1.36" fill="#fff" opacity=".75"/><ellipse cx="70" cy="70" rx="5.6" ry="4.4" fill="#3A2413"/><path d="M70 75v3" stroke="#7A4A1C" stroke-width="2.4" stroke-linecap="round"/><path d="M64 79 h12 v6 a3 3 0 0 1 -12 0z" fill="#fff" stroke="#D9B98A" stroke-width="1.4"/><path d="M70 79 v6" stroke="#D9B98A" stroke-width="1.2"/><ellipse cx="50" cy="42" rx="14" ry="8.68" fill="#fff" opacity=".16" transform="rotate(-18 50 42)"/><defs><linearGradient id="jk34C759" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2E3D5C"/><stop offset="1" stop-color="#1E2A42"/></linearGradient></defs><path d="M70 96C44 96 27 112 24 140H116C113 112 96 96 70 96Z" fill="url(#jk34C759)"/><path d="M70 97 L56 108 L70 140 L84 108 Z" fill="#F7F9FD"/><path d="M70 97 L57 107 M70 97 L83 107" stroke="#22304A" stroke-width="5.5" stroke-linecap="round"/><path d="M65 108 h10 l-2 6 h-6 z" fill="#34C759"/><path d="M66.6 114 L70 136 L73.4 114 Z" fill="#34C759"/><path d="M40 112 q-8 12 -9 28" stroke="#000" stroke-width="0" fill="none"/><ellipse cx="70" cy="99" rx="16" ry="4" fill="#000" opacity=".12"/><g transform="translate(30,106) rotate(-10)"><rect x="-11" y="-2" width="24" height="30" rx="3" fill="#F3F5FA" stroke="#C7CBD6" stroke-width="1.6"/><rect x="-5" y="-6" width="12" height="6" rx="2" fill="#9AA2B4"/><path d="M-6 8 h14 M-6 14 h14 M-6 20 h9" stroke="#34C759" stroke-width="2" stroke-linecap="round"/></g></svg>`,
+        dolphin: `<svg viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="dlF" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6FC9E6"/><stop offset="1" stop-color="#3C97BD"/></linearGradient></defs><path d="M58 22 Q68 2 80 24 Q70 28 64 36 Z" fill="#3FA9C9"/><circle cx="70" cy="60" r="40" fill="url(#dlF)"/><path d="M70 66 Q44 68 32 86 Q48 96 70 93 Q92 96 108 86 Q96 68 70 66Z" fill="#EAF7FC"/><path d="M36 84 q-16 3 -22 12 q16 5 27 -3 Z" fill="#59B7D6"/><ellipse cx="56" cy="56" rx="6.396" ry="7.8" fill="#16323F"/><ellipse cx="84" cy="56" rx="6.396" ry="7.8" fill="#16323F"/><circle cx="58.4" cy="53" r="2.652" fill="#fff"/><circle cx="86.4" cy="53" r="2.652" fill="#fff"/><circle cx="53.4" cy="59.2" r="1.326" fill="#fff" opacity=".75"/><circle cx="81.4" cy="59.2" r="1.326" fill="#fff" opacity=".75"/><path d="M44 86 q12 6 26 4 q14 2 26 -4" stroke="#2C7A94" stroke-width="2.8" fill="none" stroke-linecap="round"/><ellipse cx="42" cy="76" rx="8" ry="5" fill="#FF8A7A" opacity=".38"/><ellipse cx="98" cy="76" rx="8" ry="5" fill="#FF8A7A" opacity=".38"/><ellipse cx="52" cy="40" rx="15" ry="9.3" fill="#fff" opacity=".16" transform="rotate(-18 52 40)"/><defs><linearGradient id="jk00B8D9" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2E3D5C"/><stop offset="1" stop-color="#1E2A42"/></linearGradient></defs><path d="M70 96C44 96 27 112 24 140H116C113 112 96 96 70 96Z" fill="url(#jk00B8D9)"/><path d="M70 97 L56 108 L70 140 L84 108 Z" fill="#F7F9FD"/><path d="M70 97 L57 107 M70 97 L83 107" stroke="#22304A" stroke-width="5.5" stroke-linecap="round"/><path d="M65 108 h10 l-2 6 h-6 z" fill="#00B8D9"/><path d="M66.6 114 L70 136 L73.4 114 Z" fill="#00B8D9"/><path d="M40 112 q-8 12 -9 28" stroke="#000" stroke-width="0" fill="none"/><ellipse cx="70" cy="99" rx="16" ry="4" fill="#000" opacity=".12"/></svg>`,
+      };
+
+      /* 15 questions — each option distributes points to types */
+      const Q = [
+        {
+          t: "매장에 새 메뉴 아이디어가 떠올랐다. 사장님의 첫 반응은?",
+          a: {
+            txt: "일단 이번 주에 바로 테스트해본다",
+            s: { dolphin: 2, tiger: 1 },
+          },
+          b: {
+            txt: "반응과 원가를 먼저 따져보고 결정한다",
+            s: { owl: 2, fox: 1, squirrel: 1 },
+          },
+        },
+        {
+          t: "피크타임에 직원이 실수를 했다. 어떻게 하나?",
+          a: {
+            txt: "그 자리에서 바로 짚고 바로잡는다",
+            s: { tiger: 2, dog: 1 },
+          },
+          b: {
+            txt: "바쁨이 끝난 뒤 따로 조용히 얘기한다",
+            s: { bear: 2, owl: 1 },
+          },
+        },
+        {
+          t: "이번 달 매출이 목표보다 낮다. 먼저 하는 일은?",
+          a: {
+            txt: "데이터를 뜯어보며 원인을 분석한다",
+            s: { fox: 2, squirrel: 1 },
+          },
+          b: { txt: "직원들과 모여서 회의를 한다", s: { dog: 2, dolphin: 1 } },
+        },
+        {
+          t: "신규 직원 채용, 무엇을 가장 크게 보나?",
+          a: {
+            txt: "성실함과 오래 함께할 안정감",
+            s: { bear: 2, squirrel: 1 },
+          },
+          b: {
+            txt: "센스와 손님을 대하는 에너지",
+            s: { otter: 2, dolphin: 1 },
+          },
+        },
+        {
+          t: "경쟁 매장이 바로 옆에 생겼다. 사장님은?",
+          a: {
+            txt: "불안하지만, 일단 하던 대로 운영한다",
+            s: { owl: 2, bear: 1 },
+          },
+          b: { txt: "홍보와 이벤트를 확 늘린다", s: { tiger: 2, dolphin: 1 } },
+        },
+        {
+          t: "나의 장사 추구미는?",
+          a: {
+            txt: "꾸준하고 안정적인 매일의 운영",
+            s: { squirrel: 2, bear: 1 },
+          },
+          b: { txt: "새로운 시도와 변화의 재미", s: { dolphin: 2, otter: 1 } },
+        },
+        {
+          t: "직원과 가까워지는 방식은?",
+          a: { txt: "평소에도 자주 이야기하는 편", s: { otter: 2, dog: 1 } },
+          b: { txt: "필요할 때만 이야기하는 편", s: { owl: 2, bear: 1 } },
+        },
+        {
+          t: "선택의 갈림길에서 더 중요하게 보는 것은?",
+          a: { txt: "자료를 모아 근거로 판단한다", s: { owl: 2, fox: 1 } },
+          b: {
+            txt: "경험과 직감을 믿고 빠르게 결정한다",
+            s: { tiger: 2, bear: 1 },
+          },
+        },
+        {
+          t: "가게 살림, 사장님의 스타일은?",
+          a: {
+            txt: "재고·지출을 꼼꼼히 기록하고 관리",
+            s: { squirrel: 3, owl: 1 },
+          },
+          b: { txt: "큰 흐름만 보고 세부는 위임한다", s: { dog: 2, tiger: 1 } },
+        },
+        {
+          t: "SNS에 우리 가게를 알린다면?",
+          a: {
+            txt: "내가 직접 등장해 가게의 얼굴이 된다",
+            s: { otter: 2, tiger: 1 },
+          },
+          b: { txt: "브랜드 감성 위주로 보여준다", s: { dolphin: 2, fox: 1 } },
+        },
+        {
+          t: "직원이 힘들어보인다. 사장님의 소통방식은?",
+          a: { txt: "먼저 다가가 마음을 살핀다", s: { dog: 2, otter: 1 } },
+          b: { txt: "괜찮아지겠거니 하고 신경 안쓴다", s: { bear: 2, owl: 1 } },
+        },
+        {
+          t: "바쁜 매장에서 내가 맡는 포지션은?",
+          a: { txt: "직접 뛰는 플레이어", s: { otter: 2, tiger: 1 } },
+          b: { txt: "흐름을 잡는 감독", s: { fox: 2, dog: 1 } },
+        },
+        {
+          t: "매장 인테리어를 바꾼다면?",
+          a: {
+            txt: "지금까지 없던 새로운 분위기로 바꾼다",
+            s: { dolphin: 2, otter: 1 },
+          },
+          b: {
+            txt: "익숙하고 편안한 분위기로 다듬는다",
+            s: { bear: 2, squirrel: 1 },
+          },
+        },
+        {
+          t: "팀에 갈등이 생겼다. 사장님의 해결법은?",
+          a: { txt: "규칙과 기준으로 잘잘못을 따진다", s: { fox: 2, owl: 1 } },
+          b: { txt: "서로 대화하게 자리를 만든다", s: { dog: 2, otter: 1 } },
+        },
+        {
+          t: "1년 뒤 우리 가게, 어떤 모습이길 바라나?",
+          a: { txt: "빠르게 성장해 매장을 늘린 모습", s: { tiger: 2, fox: 1 } },
+          b: {
+            txt: "단골과 팀이 단단히 자리잡은 모습",
+            s: { squirrel: 2, dog: 1 },
+          },
+        },
+      ];
+
+      /* ================= RENDER STATIC ================= */
+      function renderTypes() {
+        const grid = document.getElementById("typeGrid");
+        if (!grid) return;
+        grid.innerHTML = ORDER.map((k) => {
+          const t = TYPES[k];
+          return `<article class="tcard" style="--tc:${t.tc}">
+      <span class="em">${CHAR[k]}</span>
+      <h3>${t.name}</h3><p>${t.one}</p>
+      <span class="chip">${t.desc}</span>
+    </article>`;
+        }).join("");
+      }
+      function renderPreview() {
+        const g = document.getElementById("pvGrid");
+        if (!g) return;
+        g.innerHTML = ORDER.map((k) => {
+          const t = TYPES[k];
+          return `<div class="pv"><span class="em">${CHAR[k]}</span><div><b>${t.name}</b><span>${t.one}</span></div></div>`;
+        }).join("");
+      }
+      renderTypes();
+      renderPreview();
+
+      /* ================= QUIZ LOGIC ================= */
+      /* ================= INTRO FORM ================= */
+      let userInfo = { name: "", shop: "", gender: "", age: "" };
+
+      function openIntro() {
+        document.getElementById("introForm").classList.add("open");
+        document.body.style.overflow = "hidden";
+        setTimeout(() => {
+          const el = document.getElementById("fName");
+          if (el) el.focus();
+        }, 260);
+      }
+      function closeIntro() {
+        document.getElementById("introForm").classList.remove("open");
+        document.body.style.overflow = "";
+      }
+      /* chip 선택 (성별 / 연령대) */
+      ["fGender", "fAge"].forEach((id) => {
+        const box = document.getElementById(id);
+        if (!box) return;
+        box.addEventListener("click", (e) => {
+          const b = e.target.closest(".chip-opt");
+          if (!b) return;
+          box
+            .querySelectorAll(".chip-opt")
+            .forEach((x) => x.classList.remove("on"));
+          b.classList.add("on");
+        });
+      });
+      function pickedVal(id) {
+        const on = document.querySelector("#" + id + " .chip-opt.on");
+        return on ? on.dataset.v : "";
+      }
+      function submitIntro() {
+        const nameEl = document.getElementById("fName");
+        const err = document.getElementById("fNameErr");
+        const name = (nameEl.value || "").trim();
+        if (!name) {
+          nameEl.classList.add("bad");
+          err.classList.add("show");
+          nameEl.focus();
+          return;
+        }
+        nameEl.classList.remove("bad");
+        err.classList.remove("show");
+        userInfo = {
+          name: name,
+          shop: (document.getElementById("fShop").value || "").trim(),
+          gender: pickedVal("fGender"),
+          age: pickedVal("fAge"),
+        };
+        closeIntro();
+        startQuiz();
+      }
+      /* 닉네임 입력 중 에러 해제 + 엔터로 진행 */
+      (function () {
+        const el = document.getElementById("fName");
+        if (!el) return;
+        el.addEventListener("input", () => {
+          if (el.value.trim()) {
+            el.classList.remove("bad");
+            document.getElementById("fNameErr").classList.remove("show");
+          }
+        });
+        el.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") submitIntro();
+        });
+        const shop = document.getElementById("fShop");
+        if (shop)
+          shop.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") submitIntro();
+          });
+      })();
+
+      let cur = 0,
+        answers = new Array(15).fill(null);
+      let isAnswering = false;
+      let quizFinished = false;
+      const quiz = document.getElementById("quiz");
+      const track = (eventName, eventProperties) =>
+        window.workDnaAmplitude?.track(eventName, eventProperties);
+      const GOOGLE_APPS_SCRIPT_URL =
+        "https://script.google.com/macros/s/AKfycbzzfIyzRnO1AC3Zukkc1iCmwD1_5db2ZeT3l2wk6lPXZc5eqoMeS0tdYF8J0KXhxR1Q/exec";
+
+      function notifySurveyComplete(resultType) {
+        const params = new URLSearchParams({
+          name: userInfo.name,
+          shop: userInfo.shop,
+          gender: userInfo.gender,
+          age: userInfo.age,
+          result_type: TYPES[resultType].name,
+        });
+        fetch(`${GOOGLE_APPS_SCRIPT_URL}?${params}`, {
+          method: "GET",
+          mode: "no-cors",
+          keepalive: true,
+        }).catch((err) =>
+          console.warn("Apps Script completion ping failed", err),
+        );
+      }
+
+      function startQuiz() {
+        track("Quiz Started");
+        cur = 0;
+        isAnswering = false;
+        quizFinished = false;
+        answers.fill(null);
+        quiz.classList.add("open");
+        document.body.style.overflow = "hidden";
+        buildHelix();
+        renderQ();
+      }
+      function closeQuiz(trackAbandonment = true) {
+        if (trackAbandonment && quiz.classList.contains("open")) {
+          track("Quiz Abandoned", {
+            answered_count: answers.filter(Boolean).length,
+            question_number: cur + 1,
+          });
+        }
+        quiz.classList.remove("open");
+        document.getElementById("calc").classList.remove("on");
+        document.body.style.overflow = "";
+      }
+      function buildHelix() {
+        document.getElementById("helixStrip").innerHTML = Q.map(
+          (_, i) => `<i data-h="${i}"></i>`,
+        ).join("");
+      }
+
+      function renderQ() {
+        const q = Q[cur];
+        document.getElementById("qNow").textContent = cur + 1;
+        document.getElementById("qStage").textContent = `질문 ${cur + 1}`;
+        document.getElementById("qBar").style.width = (cur / 15) * 100 + "%";
+        document.getElementById("qBack").style.visibility =
+          cur === 0 ? "hidden" : "visible";
+        document
+          .querySelectorAll("#helixStrip i")
+          .forEach((el, i) => el.classList.toggle("on", i <= cur - 1));
+        const body = document.getElementById("qText");
+        const opts = document.getElementById("qOptions");
+        body.textContent = q.t;
+        opts.innerHTML = `
+    <button class="opt ${answers[cur] === "a" ? "pick" : ""}" onclick="answer('a')"><span class="key">A</span><span>${q.a.txt}</span></button>
+    <button class="opt ${answers[cur] === "b" ? "pick" : ""}" onclick="answer('b')"><span class="key">B</span><span>${q.b.txt}</span></button>`;
+        body.classList.remove("q-anim-in");
+        opts.classList.remove("q-anim-in");
+        void body.offsetWidth;
+        body.classList.add("q-anim-in");
+        opts.classList.add("q-anim-in");
+      }
+      function answer(choice) {
+        if (isAnswering || quizFinished) return;
+        isAnswering = true;
+        track("Quiz Answered", {
+          choice,
+          input_method: "click",
+          question_number: cur + 1,
+        });
+        answers[cur] = choice;
+        document
+          .querySelectorAll(".opt")
+          .forEach((o) => o.classList.remove("pick"));
+        event.currentTarget.classList.add("pick");
+        document.getElementById("qBar").style.width =
+          ((cur + 1) / 15) * 100 + "%";
+        const b = document.getElementById("qText"),
+          o = document.getElementById("qOptions");
+        setTimeout(() => {
+          if (cur < 14) {
+            b.classList.add("q-anim-out");
+            o.classList.add("q-anim-out");
+            setTimeout(() => {
+              cur++;
+              isAnswering = false;
+              b.classList.remove("q-anim-out");
+              o.classList.remove("q-anim-out");
+              renderQ();
+            }, 280);
+          } else {
+            finish();
+          }
+        }, 240);
+      }
+      function prevQ() {
+        if (cur > 0 && !isAnswering && !quizFinished) {
+          cur--;
+          renderQ();
+        }
+      }
+
+      function finish() {
+        if (quizFinished) return;
+        quizFinished = true;
+        document.getElementById("calc").classList.add("on");
+        setTimeout(() => {
+          const score = {};
+          ORDER.forEach((k) => (score[k] = 0));
+          answers.forEach((ans, i) => {
+            const s = Q[i][ans || "a"].s;
+            for (const k in s) score[k] += s[k];
+          });
+          // 각 유형의 '천장'(획득 가능 최대점) 대비 성취도로 공정하게 판정 — 특정 유형 쏠림 방지
+          const MAX = {};
+          ORDER.forEach((k) => (MAX[k] = 0));
+          Q.forEach((q) => {
+            ORDER.forEach((k) => {
+              MAX[k] += Math.max(q.a.s[k] || 0, q.b.s[k] || 0);
+            });
+          });
+          let win = ORDER[0],
+            bestKey = [-1, -1, -1, -1];
+          ORDER.forEach((k, idx) => {
+            const key = [score[k] / MAX[k], score[k], -MAX[k], -idx];
+            for (let i = 0; i < key.length; i++) {
+              if (key[i] !== bestKey[i]) {
+                if (key[i] > bestKey[i]) {
+                  win = k;
+                  bestKey = key;
+                }
+                break;
+              }
+            }
+          });
+          document.getElementById("calc").classList.remove("on");
+          closeQuiz(false);
+          showResult(win, score);
+        }, 2100);
+      }
+
+      /* ================= RESULT ================= */
+      let currentType = null;
+      function showResult(key, score) {
+        const t = TYPES[key];
+        currentType = t;
+        const result = document.getElementById("result");
+        document.getElementById("rEmoji").innerHTML = CHAR[key];
+        document.getElementById("rName").textContent = t.name;
+        document.getElementById("rName").style.color = t.tc;
+        document.getElementById("rOne").textContent = t.one;
+        // 입력 정보로 개인화
+        const nick = (userInfo.name || "").trim();
+        const shop = (userInfo.shop || "").trim();
+        const tagEl = document.getElementById("rTag");
+        if (tagEl)
+          tagEl.textContent = shop
+            ? `${shop} · ${nick || "사장님"}의 WORK DNA`
+            : nick
+              ? `${nick}님의 WORK DNA`
+              : "당신의 WORK DNA";
+        const headEl = document.getElementById("rWhoHead");
+        if (headEl)
+          headEl.textContent = nick ? `🧬 ${nick} 사장님은…` : "🧬 사장님은…";
+
+        const splitLine = (s) => {
+          const p = String(s).split("|||");
+          return { t: p[0], d: p[1] || "" };
+        };
+        document.getElementById("rStrengths").innerHTML = t.strengths
+          .map((s, i) => {
+            const o = splitLine(s);
+            return `<div class="li"><span class="mk">${i + 1}</span><span class="li-txt"><b>${o.t}</b>${o.d ? `<em>${o.d}</em>` : ""}</span></div>`;
+          })
+          .join("");
+        document.getElementById("rWeak").innerHTML = t.weak
+          .map((s) => {
+            const o = splitLine(s);
+            return `<div class="li neg"><span class="mk">!</span><span class="li-txt"><b>${o.t}</b>${o.d ? `<em>${o.d}</em>` : ""}</span></div>`;
+          })
+          .join("");
+        document.getElementById("rMind").innerHTML = (t.mind || [])
+          .map(
+            (s) =>
+              `<div class="mind"><span class="who">우리 직원</span>${s}</div>`,
+          )
+          .join("");
+        document.getElementById("rIdeal").innerHTML = t.ideal
+          .map((k) => {
+            const e = TYPES[k];
+            return `<div class="emp-row"><span class="em">${CHAR[k]}</span><div class="txt"><b>${e.name}</b><span>${e.one}</span></div><span class="badge good">시너지 ↑</span></div>`;
+          })
+          .join("");
+        document.getElementById("rConflict").innerHTML = t.conflict
+          .map((k) => {
+            const e = TYPES[k];
+            const same = k === key;
+            return `<div class="emp-row"><span class="em">${CHAR[k]}</span><div class="txt"><b>${e.name}${same ? " (동일 유형)" : ""}</b><span>${same ? "같은 성향끼리는 주도권이 부딪히기 쉬워요" : e.one}</span></div><span class="badge bad">주의</span></div>`;
+          })
+          .join("");
+
+        drawRadar(t);
+
+        result.classList.add("open");
+        result.scrollTop = 0;
+        document.body.style.overflow = "hidden";
+        track("Quiz Completed", { result_type: key });
+        notifySurveyComplete(key);
+      }
+      function closeResult() {
+        document.getElementById("result").classList.remove("open");
+        document.body.style.overflow = "";
+      }
+      function restart() {
+        track("Quiz Restarted", { result_type: currentType?.key });
+        closeResult();
+        startQuiz();
+      }
+
+      /* ---- radar chart (SVG) ---- */
+      function drawRadar(t) {
+        const N = 6,
+          cx = 130,
+          cy = 130,
+          R = 100;
+        const tc = t.tc;
+        const pt = (i, r) => {
+          const a = -Math.PI / 2 + (i * 2 * Math.PI) / N;
+          return [cx + Math.cos(a) * r, cy + Math.sin(a) * r];
+        };
+        let grid = "";
+        for (let g = 1; g <= 4; g++) {
+          const r = (R * g) / 4;
+          let p = "";
+          for (let i = 0; i < N; i++) {
+            const [x, y] = pt(i, r);
+            p += (i ? "L" : "M") + x.toFixed(1) + " " + y.toFixed(1) + " ";
+          }
+          grid += `<path d="${p}Z" fill="none" stroke="#e6e3f2" stroke-width="1"/>`;
+        }
+        let axis = "";
+        for (let i = 0; i < N; i++) {
+          const [x, y] = pt(i, R);
+          axis += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#e6e3f2" stroke-width="1"/>`;
+        }
+        let poly = "";
+        const dots = [];
+        for (let i = 0; i < N; i++) {
+          const [x, y] = pt(i, (R * t.radar[i]) / 100);
+          poly += (i ? "L" : "M") + x.toFixed(1) + " " + y.toFixed(1) + " ";
+          dots.push([x, y]);
+        }
+        let labels = "";
+        for (let i = 0; i < N; i++) {
+          const [x, y] = pt(i, R + 22);
+          labels += `<text x="${x}" y="${y + 4}" font-size="12.5" font-weight="700" fill="#6C6A7C" text-anchor="middle">${AXES[i]}</text>`;
+        }
+        const svg = `<svg viewBox="0 0 260 260" width="240" role="img" aria-label="운영 스타일 레이더 차트">
+    ${grid}${axis}
+    <path d="${poly}Z" fill="${tc}33" stroke="${tc}" stroke-width="2.5" stroke-linejoin="round"/>
+    ${dots.map(([x, y]) => `<circle cx="${x}" cy="${y}" r="4" fill="${tc}"/>`).join("")}
+    ${labels}
+  </svg>`;
+        document.getElementById("radarBox").innerHTML = svg;
+        document.getElementById("radarLegend").innerHTML = AXES.map(
+          (a, i) => `<div>${a} <b style="color:${tc}">${t.radar[i]}</b></div>`,
+        ).join("");
+      }
+
+      /* ================= SHARE ================= */
+      function shareLink(btn) {
+        const url = location.href.split("#")[0];
+        const title = "WORK DNA — 사장님 운영 유형 테스트";
+        const text = "우리 팀 궁합, 같이 확인해봐요! 90초 테스트 🧬";
+        track("Result Share Clicked", {
+          method: navigator.share ? "native_share" : "clipboard",
+          result_type: currentType?.key,
+        });
+        const flash = (msg) => {
+          if (!btn) return;
+          const old = btn.innerHTML;
+          btn.innerHTML = msg;
+          setTimeout(() => {
+            btn.innerHTML = old;
+          }, 1800);
+        };
+        if (navigator.share) {
+          navigator.share({ title, text, url }).catch(() => {});
+          return;
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard
+            .writeText(`${text}\n${url}`)
+            .then(() => flash("링크가 복사됐어요! 붙여넣기 하세요 ✅"))
+            .catch(() => flash("주소창의 링크를 복사해 주세요"));
+          return;
+        }
+        flash("주소창의 링크를 복사해 주세요");
+      }
+      function closeShare() {
+        const s = document.getElementById("shareStage");
+        if (s) s.classList.remove("open");
+      }
+
+      /* ================= PREVIEW ================= */
+      function openPreview() {
+        const p = document.getElementById("preview");
+        if (!p) return;
+        p.classList.add("open");
+        document.body.style.overflow = "hidden";
+      }
+      function closePreview() {
+        const p = document.getElementById("preview");
+        if (!p) return;
+        p.classList.remove("open");
+        if (
+          !document.getElementById("result").classList.contains("open") &&
+          !quiz.classList.contains("open")
+        )
+          document.body.style.overflow = "";
+      }
+
+      /* ================= NAV hide-on-scroll ================= */
+      let lastY = 0;
+      const nav = document.getElementById("nav");
+      window.addEventListener(
+        "scroll",
+        () => {
+          const y = window.scrollY;
+          nav.classList.toggle("hide", y > lastY && y > 200);
+          lastY = y;
+        },
+        { passive: true },
+      );
+
+      /* keyboard: A/B answer, Esc close */
+      document.addEventListener("keydown", (e) => {
+        if (quiz.classList.contains("open")) {
+          if (e.key.toLowerCase() === "a") answerKey("a");
+          if (e.key.toLowerCase() === "b") answerKey("b");
+          if (e.key === "Escape") closeQuiz();
+        }
+        if (e.key === "Escape") {
+          closeShare();
+          closePreview();
+          if (document.getElementById("introForm").classList.contains("open"))
+            closeIntro();
+          if (document.getElementById("result").classList.contains("open"))
+            closeResult();
+        }
+      });
+      function answerKey(c) {
+        if (isAnswering || quizFinished) return;
+        isAnswering = true;
+        const btns = document.querySelectorAll(".opt");
+        const el = c === "a" ? btns[0] : btns[1];
+        if (el) {
+          track("Quiz Answered", {
+            choice: c,
+            input_method: "keyboard",
+            question_number: cur + 1,
+          });
+          el.classList.add("pick");
+          answers[cur] = c;
+          document.getElementById("qBar").style.width =
+            ((cur + 1) / 15) * 100 + "%";
+          const b = document.getElementById("qText"),
+            o = document.getElementById("qOptions");
+          setTimeout(() => {
+            if (cur < 14) {
+              b.classList.add("q-anim-out");
+              o.classList.add("q-anim-out");
+              setTimeout(() => {
+                cur++;
+                isAnswering = false;
+                b.classList.remove("q-anim-out");
+                o.classList.remove("q-anim-out");
+                renderQ();
+              }, 280);
+            } else {
+              finish();
+            }
+          }, 240);
+        } else {
+          isAnswering = false;
+        }
+      }
+    </script>
+  </body>
+</html>
