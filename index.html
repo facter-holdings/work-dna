@@ -1253,6 +1253,22 @@
         font-weight: 600;
         margin-top: 10px;
       }
+      .res-shared-note {
+        display: none;
+        margin: 18px auto 0;
+        padding: 9px 18px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.14);
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        color: #fff;
+        font-size: 13.5px;
+        font-weight: 700;
+        width: fit-content;
+        max-width: 90%;
+      }
+      .res-shared-note.on {
+        display: block;
+      }
 
       .res-body {
         width: min(1060px, 92vw);
@@ -1535,7 +1551,49 @@
       }
       .sns-box h3 {
         font-size: 22px;
-        margin-bottom: 24px;
+        margin-bottom: 8px;
+      }
+      .sns-desc {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--muted);
+        line-height: 1.55;
+        margin-bottom: 22px;
+      }
+      .sns-actions {
+        display: grid;
+        gap: 10px;
+      }
+      .share-act {
+        width: 100%;
+        height: 54px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        font-size: 15.5px;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        transition:
+          transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1),
+          box-shadow 0.2s;
+      }
+      .share-act svg {
+        width: 21px;
+        height: 21px;
+      }
+      .share-act:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 14px 26px -12px rgba(11, 10, 18, 0.45);
+      }
+      .share-act.link {
+        background: var(--purple);
+        color: #fff;
+      }
+      .share-act.kakao {
+        background: #fee500;
+        color: #3c1e1e;
       }
       .sns-close {
         position: absolute;
@@ -1552,52 +1610,6 @@
       }
       .sns-close:hover {
         background: #e0ddf0;
-      }
-      .sns-icons {
-        display: flex;
-        justify-content: center;
-        gap: 14px;
-      }
-      .sns-btn {
-        width: 56px;
-        height: 56px;
-        border-radius: 50%;
-        display: grid;
-        place-items: center;
-        transition:
-          transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1),
-          box-shadow 0.2s;
-      }
-      .sns-btn:hover {
-        transform: translateY(-3px) scale(1.06);
-        box-shadow: 0 12px 24px -10px rgba(11, 10, 18, 0.4);
-      }
-      .sns-btn svg {
-        width: 28px;
-        height: 28px;
-      }
-      .sns-btn.kakao {
-        background: #fee500;
-        color: #3c1e1e;
-      }
-      .sns-btn.twitter {
-        background: #000;
-        color: #fff;
-      }
-      .sns-btn.instagram {
-        background: linear-gradient(
-          45deg,
-          #f09433 0%,
-          #e6683c 25%,
-          #dc2743 50%,
-          #cc2366 75%,
-          #bc1888 100%
-        );
-        color: #fff;
-      }
-      .sns-btn.facebook {
-        background: #1877f2;
-        color: #fff;
       }
       .sns-msg {
         min-height: 20px;
@@ -2754,6 +2766,7 @@
         <div class="res-emoji" id="rEmoji">🦦</div>
         <h1 class="res-name" id="rName">자유냥</h1>
         <p class="res-onel" id="rOne"></p>
+        <p class="res-shared-note" id="rSharedNote"></p>
       </div>
       <div class="res-body">
         <div class="res-grid">
@@ -2828,7 +2841,7 @@
             </svg>
             직원에게 공유하기
           </button>
-          <button class="btn btn-dark" onclick="restart()">
+          <button class="btn btn-dark" id="rRestartBtn" onclick="restart()">
             다시 테스트하기
           </button>
         </div>
@@ -2856,54 +2869,28 @@
           </svg>
         </button>
         <h3>직원에게 공유하기</h3>
-        <div class="sns-icons">
-          <button
-            class="sns-btn kakao"
-            onclick="shareSns('kakao')"
-            aria-label="카카오톡으로 공유"
-            title="카카오톡"
-          >
+        <p class="sns-desc" id="snsDesc">
+          사장님의 결과 페이지를 그대로 볼 수 있는 링크예요
+        </p>
+        <div class="sns-actions">
+          <button class="share-act link" onclick="shareSns('link')">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path
+                d="M10.6 13.4a4 4 0 006 .4l2.4-2.4a4 4 0 00-5.7-5.7l-1.4 1.4M13.4 10.6a4 4 0 00-6-.4L5 12.6a4 4 0 005.7 5.7l1.4-1.4"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+            링크 공유
+          </button>
+          <button class="share-act kakao" onclick="shareSns('kakao')">
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path
                 d="M12 3c5.8 0 10.5 3.66 10.5 8.18 0 4.51-4.7 8.17-10.5 8.17-.62 0-1.22-.04-1.8-.13l-4.36 2.9c-.22.15-.52-.06-.46-.32l.84-3.98C3.46 16.2 1.5 13.86 1.5 11.18 1.5 6.66 6.2 3 12 3z"
               />
             </svg>
-          </button>
-          <button
-            class="sns-btn twitter"
-            onclick="shareSns('twitter')"
-            aria-label="X(트위터)로 공유"
-            title="X(트위터)"
-          >
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path
-                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.451-6.231zm-1.161 17.52h1.833L7.084 4.126H5.117l11.966 15.644z"
-              />
-            </svg>
-          </button>
-          <button
-            class="sns-btn instagram"
-            onclick="shareSns('instagram')"
-            aria-label="인스타그램으로 공유"
-            title="인스타그램"
-          >
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path
-                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"
-              />
-            </svg>
-          </button>
-          <button
-            class="sns-btn facebook"
-            onclick="shareSns('facebook')"
-            aria-label="페이스북으로 공유"
-            title="페이스북"
-          >
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path
-                d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"
-              />
-            </svg>
+            카카오톡 공유하기
           </button>
         </div>
         <p class="sns-msg" id="snsMsg" role="status" aria-live="polite"></p>
@@ -3620,7 +3607,11 @@
 
       /* ================= RESULT ================= */
       let currentType = null;
-      function showResult(key, score) {
+      // 공유 링크로 들어와 남의 결과를 보는 중인지 — 집계/재시작 동작이 달라진다
+      let sharedView = false;
+      function showResult(key, score, opts) {
+        const shared = !!(opts && opts.shared);
+        sharedView = shared;
         const t = TYPES[key];
         currentType = t;
         const result = document.getElementById("result");
@@ -3680,9 +3671,26 @@
 
         drawRadar(t);
 
+        const noteEl = document.getElementById("rSharedNote");
+        if (noteEl) {
+          noteEl.textContent = shared
+            ? `${nick ? nick + " " : ""}사장님이 공유한 결과예요 🧬`
+            : "";
+          noteEl.classList.toggle("on", shared);
+        }
+        const restartBtn = document.getElementById("rRestartBtn");
+        if (restartBtn)
+          restartBtn.textContent = shared
+            ? "나도 테스트해보기"
+            : "다시 테스트하기";
+
         result.classList.add("open");
         result.scrollTop = 0;
         document.body.style.overflow = "hidden";
+        if (shared) {
+          track("Shared Result Viewed", { result_type: key });
+          return;
+        }
         track("Quiz Completed", { result_type: key });
         notifySurveyComplete(key);
       }
@@ -3691,6 +3699,17 @@
         document.body.style.overflow = "";
       }
       function restart() {
+        // 공유받은 사람은 본인 정보부터 입력받아야 자기 결과가 나온다
+        if (sharedView) {
+          track("Shared Result Restarted", { result_type: currentType?.key });
+          clearShareParam();
+          sharedView = false;
+          currentType = null;
+          userInfo = { name: "", shop: "", gender: "", age: "" };
+          closeResult();
+          openIntro();
+          return;
+        }
         track("Quiz Restarted", { result_type: currentType?.key });
         closeResult();
         startQuiz();
@@ -3747,12 +3766,97 @@
       }
 
       /* ================= SHARE ================= */
+      /* 결과를 URL 하나에 담아 공유 — 서버가 없으므로 링크 자체가 저장소다 */
+      const SHARE_PARAM = "r";
+
+      function b64urlEncode(str) {
+        const bytes = new TextEncoder().encode(str);
+        let bin = "";
+        bytes.forEach((b) => (bin += String.fromCharCode(b)));
+        return btoa(bin)
+          .replace(/\+/g, "-")
+          .replace(/\//g, "_")
+          .replace(/=+$/, "");
+      }
+      function b64urlDecode(str) {
+        const b64 = str.replace(/-/g, "+").replace(/_/g, "/");
+        const bin = atob(b64 + "===".slice((b64.length + 3) % 4));
+        return new TextDecoder().decode(
+          Uint8Array.from(bin, (c) => c.charCodeAt(0)),
+        );
+      }
+      function baseUrl() {
+        return location.origin + location.pathname;
+      }
+      function buildShareUrl() {
+        if (!currentType) return baseUrl(); // 아직 결과가 없으면 테스트 초대 링크
+        const payload = {
+          v: 1,
+          k: currentType.key,
+          n: (userInfo.name || "").slice(0, 24),
+          s: (userInfo.shop || "").slice(0, 32),
+        };
+        return `${baseUrl()}?${SHARE_PARAM}=${b64urlEncode(JSON.stringify(payload))}`;
+      }
+      function clearShareParam() {
+        if (!new URLSearchParams(location.search).get(SHARE_PARAM)) return;
+        history.replaceState(null, "", baseUrl() + location.hash);
+      }
+      /* 공유 링크로 접속했을 때 결과 페이지 복원 */
+      function restoreSharedResult() {
+        const raw = new URLSearchParams(location.search).get(SHARE_PARAM);
+        if (!raw) return;
+        let data = null;
+        try {
+          data = JSON.parse(b64urlDecode(raw));
+        } catch (e) {
+          console.warn("공유 링크를 해석하지 못했어요", e);
+          return;
+        }
+        if (!data || !TYPES[data.k]) return;
+        userInfo = {
+          name: String(data.n || "").slice(0, 24),
+          shop: String(data.s || "").slice(0, 32),
+          gender: "",
+          age: "",
+        };
+        showResult(data.k, null, { shared: true });
+      }
+
       function shareLink() {
         track("Result Share Clicked", {
           method: "sns_modal",
           result_type: currentType?.key,
         });
+        const desc = document.getElementById("snsDesc");
+        if (desc)
+          desc.textContent = currentType
+            ? "사장님의 결과 페이지를 그대로 볼 수 있는 링크예요"
+            : "직원에게 테스트 링크를 보내보세요";
+        snsFlash("");
         document.getElementById("shareStage").classList.add("open");
+      }
+      async function copyText(text) {
+        try {
+          await navigator.clipboard.writeText(text);
+          return true;
+        } catch (e) {
+          // 비보안 컨텍스트·구형 브라우저 폴백
+          const ta = document.createElement("textarea");
+          ta.value = text;
+          ta.setAttribute("readonly", "");
+          ta.style.cssText = "position:fixed;top:-1000px;opacity:0";
+          document.body.appendChild(ta);
+          ta.select();
+          let ok = false;
+          try {
+            ok = document.execCommand("copy");
+          } catch (err) {
+            ok = false;
+          }
+          document.body.removeChild(ta);
+          return ok;
+        }
       }
       function snsFlash(msg) {
         const el = document.getElementById("snsMsg");
@@ -3761,57 +3865,64 @@
         snsFlash._t = setTimeout(() => (el.textContent = ""), 2500);
       }
       function shareSns(ch) {
-        const url = location.href.split("#")[0];
-        const title = "WORK DNA — 사장님 운영 유형 테스트";
-        const text = "우리 팀 궁합, 같이 확인해봐요! 90초 테스트 🧬";
+        const url = buildShareUrl();
+        const nick = (userInfo.name || "").trim();
+        const title = currentType
+          ? `${nick ? nick + " " : ""}사장님의 WORK DNA는 '${currentType.name}'`
+          : "WORK DNA — 사장님 운영 유형 테스트";
+        const text = currentType
+          ? "우리 사장님 운영 유형 결과예요. 우리 팀 궁합도 확인해보세요! 🧬"
+          : "우리 팀 궁합, 같이 확인해봐요! 90초 테스트 🧬";
+        const btnLabel = currentType ? "결과 보러 가기" : "테스트 하러 가기";
         track("Result Share Channel", {
           channel: ch,
           result_type: currentType?.key,
+          shared_result: !!currentType,
         });
+        if (ch === "link") {
+          copyText(url).then((ok) =>
+            snsFlash(
+              ok
+                ? currentType
+                  ? "결과 페이지 링크가 복사됐어요! 직원에게 붙여넣어 주세요 📋"
+                  : "링크가 복사됐어요! 직원에게 붙여넣어 주세요 📋"
+                : "복사에 실패했어요. 주소창의 링크를 직접 복사해 주세요",
+            ),
+          );
+          return;
+        }
         if (ch === "kakao") {
           if (window.Kakao) {
             if (!Kakao.isInitialized())
               Kakao.init("575bb3f543501f562bd79cb765345bff");
-            Kakao.Share.sendDefault({
-              objectType: "feed",
-              content: {
-                title,
-                description: text,
-                imageUrl: location.origin + "/og-image.svg",
-                link: { mobileWebUrl: url, webUrl: url },
-              },
-              buttons: [
-                {
-                  title: "테스트 하러 가기",
+            try {
+              Kakao.Share.sendDefault({
+                objectType: "feed",
+                content: {
+                  title,
+                  description: text,
+                  imageUrl: location.origin + "/og-image.svg",
                   link: { mobileWebUrl: url, webUrl: url },
                 },
-              ],
-            });
+                buttons: [
+                  {
+                    title: btnLabel,
+                    link: { mobileWebUrl: url, webUrl: url },
+                  },
+                ],
+              });
+            } catch (e) {
+              console.warn("카카오 공유 실패", e);
+              copyText(`${text}\n${url}`).then(() =>
+                snsFlash("링크가 복사됐어요! 카카오톡에 붙여넣어 주세요"),
+              );
+            }
           } else {
-            navigator.clipboard?.writeText(`${text}\n${url}`);
-            snsFlash("링크가 복사됐어요! 카카오톡에 붙여넣어 주세요");
+            copyText(`${text}\n${url}`).then(() =>
+              snsFlash("링크가 복사됐어요! 카카오톡에 붙여넣어 주세요"),
+            );
           }
-          return;
         }
-        if (ch === "twitter") {
-          window.open(
-            `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
-            "_blank",
-            "width=550,height=420",
-          );
-          return;
-        }
-        if (ch === "facebook") {
-          window.open(
-            `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
-            "_blank",
-            "width=550,height=420",
-          );
-          return;
-        }
-        // ponytail: 인스타는 웹 공유 API가 없음 — 링크 복사가 유일한 경로
-        navigator.clipboard?.writeText(`${text}\n${url}`);
-        snsFlash("링크가 복사됐어요! 인스타 앱에 붙여넣어 주세요 📋");
       }
       function closeShare() {
         const s = document.getElementById("shareStage");
@@ -3901,6 +4012,9 @@
           isAnswering = false;
         }
       }
+
+      /* ================= BOOT ================= */
+      restoreSharedResult();
     </script>
   </body>
 </html>
