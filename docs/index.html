@@ -305,6 +305,41 @@
         transform: translateY(-3px);
         background: rgba(255, 255, 255, 0.16);
       }
+      .btn-kakao {
+        background: #fee500;
+        color: #3c1e1e;
+      }
+      .btn-kakao:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 18px 38px -14px rgba(254, 229, 0, 0.8);
+      }
+
+      /* 모달 밖(히어로·결과 페이지)에서 쓰는 안내 토스트 */
+      .toast {
+        position: fixed;
+        left: 50%;
+        bottom: 28px;
+        transform: translate(-50%, 20px);
+        z-index: 200;
+        max-width: min(420px, 90vw);
+        padding: 14px 22px;
+        border-radius: 999px;
+        background: rgba(11, 10, 18, 0.94);
+        color: #fff;
+        font-size: 14px;
+        font-weight: 700;
+        text-align: center;
+        box-shadow: var(--shadow-hard);
+        opacity: 0;
+        pointer-events: none;
+        transition:
+          opacity 0.25s ease,
+          transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .toast.on {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
       .hero-badges {
         display: flex;
         gap: 18px;
@@ -2141,6 +2176,14 @@
                 />
               </svg>
             </button>
+            <button class="btn btn-ghost" onclick="shareToOwner('hero')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M12 3c5.8 0 10.5 3.66 10.5 8.18 0 4.51-4.7 8.17-10.5 8.17-.62 0-1.22-.04-1.8-.13l-4.36 2.9c-.22.15-.52-.06-.46-.32l.84-3.98C3.46 16.2 1.5 13.86 1.5 11.18 1.5 6.66 6.2 3 12 3z"
+                />
+              </svg>
+              사장님에게 공유하기
+            </button>
           </div>
           <div class="hero-badges">
             <span class="hb"
@@ -2836,9 +2879,19 @@
           <button class="btn btn-dark" id="rRestartBtn" onclick="restart()">
             다시 테스트하기
           </button>
+          <button class="btn btn-kakao" onclick="shareToOwner('result')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 3c5.8 0 10.5 3.66 10.5 8.18 0 4.51-4.7 8.17-10.5 8.17-.62 0-1.22-.04-1.8-.13l-4.36 2.9c-.22.15-.52-.06-.46-.32l.84-3.98C3.46 16.2 1.5 13.86 1.5 11.18 1.5 6.66 6.2 3 12 3z"
+              />
+            </svg>
+            사장님에게 공유하기
+          </button>
         </div>
       </div>
     </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
     <!-- ============ SNS SHARE MODAL ============ -->
     <div
@@ -3856,6 +3909,39 @@
         clearTimeout(snsFlash._t);
         snsFlash._t = setTimeout(() => (el.textContent = ""), 2500);
       }
+      /* 모달 밖에서 쓰는 안내 — 히어로·결과 화면의 '사장님에게 공유하기'용 */
+      function showToast(msg) {
+        const el = document.getElementById("toast");
+        if (!el) return;
+        el.textContent = msg;
+        el.classList.add("on");
+        clearTimeout(showToast._t);
+        showToast._t = setTimeout(() => el.classList.remove("on"), 2800);
+      }
+      /* 카카오톡 공유 — SDK가 없거나 실패하면 링크 복사로 대체 */
+      const KAKAO_KEY = "575bb3f543501f562bd79cb765345bff";
+      function sendKakao({ title, description, url, buttonTitle }, onFallback) {
+        const link = { mobileWebUrl: url, webUrl: url };
+        if (window.Kakao) {
+          try {
+            if (!Kakao.isInitialized()) Kakao.init(KAKAO_KEY);
+            Kakao.Share.sendDefault({
+              objectType: "feed",
+              content: {
+                title,
+                description,
+                imageUrl: location.origin + "/og-image.svg",
+                link,
+              },
+              buttons: [{ title: buttonTitle, link }],
+            });
+            return;
+          } catch (e) {
+            console.warn("카카오 공유 실패 — 링크 복사로 대체", e);
+          }
+        }
+        copyText(`${description}\n${url}`).then((ok) => onFallback(ok));
+      }
       function shareSns(ch) {
         const url = buildShareUrl();
         const nick = (userInfo.name || "").trim();
@@ -3884,41 +3970,40 @@
           return;
         }
         if (ch === "kakao") {
-          if (window.Kakao) {
-            if (!Kakao.isInitialized())
-              Kakao.init("575bb3f543501f562bd79cb765345bff");
-            try {
-              Kakao.Share.sendDefault({
-                objectType: "feed",
-                content: {
-                  title,
-                  description: text,
-                  imageUrl: location.origin + "/og-image.svg",
-                  link: { mobileWebUrl: url, webUrl: url },
-                },
-                buttons: [
-                  {
-                    title: btnLabel,
-                    link: { mobileWebUrl: url, webUrl: url },
-                  },
-                ],
-              });
-            } catch (e) {
-              console.warn("카카오 공유 실패", e);
-              copyText(`${text}\n${url}`).then(() =>
-                snsFlash("링크가 복사됐어요! 카카오톡에 붙여넣어 주세요"),
-              );
-            }
-          } else {
-            copyText(`${text}\n${url}`).then(() =>
-              snsFlash("링크가 복사됐어요! 카카오톡에 붙여넣어 주세요"),
-            );
-          }
+          sendKakao(
+            { title, description: text, url, buttonTitle: btnLabel },
+            () => snsFlash("링크가 복사됐어요! 카카오톡에 붙여넣어 주세요"),
+          );
         }
       }
       function closeShare() {
         const s = document.getElementById("shareStage");
         if (s) s.classList.remove("open");
+      }
+
+      /* ---- 사장님에게 테스트 공유 (첫 화면 · 결과 화면) ---- */
+      function shareToOwner(from) {
+        // 사장님이 직접 테스트할 수 있는 초대 링크 — 결과 링크가 아니다
+        const url = baseUrl();
+        track("Owner Share Clicked", {
+          source: from,
+          result_type: currentType?.key,
+        });
+        sendKakao(
+          {
+            title: "우리 사장님은 어떤 유형일까요? 🧬",
+            description:
+              "90초면 사장님 운영 스타일과 우리 팀 궁합이 나오는 WORK DNA 테스트",
+            url,
+            buttonTitle: "테스트 하러 가기",
+          },
+          (ok) =>
+            showToast(
+              ok
+                ? "링크가 복사됐어요! 사장님께 붙여넣어 주세요 📋"
+                : "복사에 실패했어요. 주소창의 링크를 직접 복사해 주세요",
+            ),
+        );
       }
 
       /* ================= PREVIEW ================= */
