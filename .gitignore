@@ -2,3 +2,6 @@ dist
 node_modules
 .playwright-cli
 .playwright-mcp
+
+# Claude Code 개인 설정 (이 PC 전용 경로·권한 기록)
+.claude/settings.local.json
