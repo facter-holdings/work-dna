@@ -369,6 +369,35 @@ h1,h2,h3{letter-spacing:-.045em;line-height:1.02;font-weight:800}
 .tm-bar{height:16px;border-radius:999px;background:var(--surface-2);overflow:hidden;margin:10px 0 6px}
 .tm-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--purple),var(--yellow));width:0;transition:width 1.1s cubic-bezier(.2,.8,.2,1)}
 .tm-row{display:flex;justify-content:space-between;font-weight:700;font-size:13.5px;color:var(--muted)}
+/* ============ INTRO FORM (사장님용과 동일 구성) ============ */
+.intro-form{
+  position:fixed;inset:0;z-index:100;
+  background:radial-gradient(130% 100% at 50% 0, #12294F, #0C1B38 55%, var(--black));
+  color:#fff;display:none;flex-direction:column;
+  padding:22px clamp(18px,5vw,40px) 40px;overflow-y:auto;
+}
+.intro-form.open{display:flex;animation:fadeIn .4s ease}
+.if-top{display:flex;justify-content:flex-end}
+.if-body{flex:1;display:flex;flex-direction:column;justify-content:center;max-width:520px;margin-inline:auto;width:100%;text-align:center;padding:10px 0 20px}
+.if-title{font-size:clamp(28px,5vw,40px);font-weight:800;letter-spacing:-.04em;margin:14px 0 10px}
+.if-sub{color:#C4D3EC;font-size:15.5px;font-weight:500;line-height:1.6;margin-bottom:28px}
+.if-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:24px;padding:24px 22px;text-align:left;backdrop-filter:blur(6px)}
+.if-field{margin-bottom:20px}
+.if-field:last-child{margin-bottom:0}
+.if-field label{display:block;font-size:14px;font-weight:800;color:#E2EAF7;margin-bottom:9px}
+.if-field .req{font-style:normal;font-size:11px;font-weight:800;color:var(--black);background:var(--yellow);padding:2px 7px;border-radius:999px;margin-left:6px;vertical-align:middle}
+.if-field input{width:100%;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.16);border-radius:14px;padding:14px 16px;color:#fff;font-family:inherit;font-size:16px;font-weight:600;transition:border-color .2s, background .2s}
+.if-field input::placeholder{color:#8593AD;font-weight:500}
+.if-field input:focus{outline:none;border-color:var(--yellow);background:rgba(255,255,255,.13)}
+.if-field input.bad{border-color:#FF6B5A;background:rgba(255,107,90,.12)}
+.if-err{display:none;color:#FF9182;font-size:13px;font-weight:600;margin-top:7px}
+.if-err.show{display:block}
+.if-chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip-opt{background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.16);color:#D8E2F0;border-radius:999px;padding:11px 16px;font-size:14.5px;font-weight:700;font-family:inherit;transition:transform .18s cubic-bezier(.2,.8,.2,1), background .2s, border-color .2s, color .2s}
+.chip-opt:hover{transform:translateY(-2px);background:rgba(255,255,255,.15)}
+.chip-opt.on{background:var(--yellow);border-color:var(--yellow);color:var(--black)}
+.if-go{width:100%;margin-top:24px;font-size:17px;padding:17px}
+
 /* 결과 하단 — 공유 카드 + 색 테두리 알약 (사장님용과 동일 구성) */
 .res-actions{display:flex;flex-direction:column;align-items:center;gap:15px;width:min(560px,100%);margin:30px auto 0}
 .res-share-card{width:100%;background:#fff;border:1px solid var(--line);border-radius:20px;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:16px}
@@ -513,6 +542,8 @@ h1,h2,h3{letter-spacing:-.045em;line-height:1.02;font-weight:800}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 </style>
 <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.5/kakao.min.js" defer></script>
+<!-- 사장님용과 같은 Amplitude 번들을 재사용한다 (window.workDnaAmplitude 를 심어줌) -->
+<script type="module" crossorigin src="../assets/app.js"></script>
 </head>
 <body>
 
@@ -541,7 +572,7 @@ h1,h2,h3{letter-spacing:-.045em;line-height:1.02;font-weight:800}
       <p class="hero-sub">일할 때 나타나는 숨은 나 찾기</p>
       <p class="hero-desc">나의 업무 스타일을 분석하고<br>어떤 사장님·동료와 잘 맞는지 알려드립니다.</p>
       <div class="hero-cta">
-        <button class="btn btn-primary" onclick="startQuiz()">테스트 시작하기
+        <button class="btn btn-primary" onclick="openIntro()">테스트 시작하기
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
       </div>
@@ -674,7 +705,7 @@ h1,h2,h3{letter-spacing:-.045em;line-height:1.02;font-weight:800}
       </div>
       <div class="feat" style="display:grid;place-content:center;background:linear-gradient(140deg,var(--purple),var(--purple-deep));color:#fff;box-shadow:var(--shadow-hard)">
         <h3 style="font-size:22px;margin-bottom:12px">준비되셨나요?</h3>
-        <button class="btn btn-primary" style="font-size:15px;padding:13px 22px" onclick="startQuiz()">지금 시작하기</button>
+        <button class="btn btn-primary" style="font-size:15px;padding:13px 22px" onclick="openIntro()">지금 시작하기</button>
       </div>
     </div>
   </div>
@@ -711,13 +742,64 @@ h1,h2,h3{letter-spacing:-.045em;line-height:1.02;font-weight:800}
   </div>
 </div>
 
+<!-- ============ INTRO FORM ============ -->
+<div class="intro-form" id="introForm" role="dialog" aria-modal="true" aria-label="시작 전 정보 입력">
+  <div class="if-top">
+    <button class="quiz-close" onclick="closeIntro()" aria-label="닫기">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+  <div class="if-body">
+    <span class="q-stage">시작 전에</span>
+    <h2 class="if-title">잠깐만요!</h2>
+    <p class="if-sub">결과를 나에게 맞춰 보여드릴게요.<br>30초면 충분해요.</p>
+
+    <div class="if-card">
+      <div class="if-field">
+        <label for="fName">닉네임 <em class="req">필수</em></label>
+        <input id="fName" type="text" maxlength="12" placeholder="예) 성실한막내" autocomplete="nickname" />
+        <p class="if-err" id="fNameErr">닉네임을 입력해 주세요</p>
+      </div>
+
+      <div class="if-field">
+        <label for="fShop">일하는 곳</label>
+        <input id="fShop" type="text" maxlength="20" placeholder="예) 팩터치킨 동구점" autocomplete="organization" />
+      </div>
+
+      <div class="if-field">
+        <label>성별</label>
+        <div class="if-chips" id="fGender">
+          <button type="button" class="chip-opt" data-v="남성">남성</button>
+          <button type="button" class="chip-opt" data-v="여성">여성</button>
+          <button type="button" class="chip-opt" data-v="선택안함">선택 안 함</button>
+        </div>
+      </div>
+
+      <div class="if-field">
+        <label>연령대</label>
+        <div class="if-chips" id="fAge">
+          <button type="button" class="chip-opt" data-v="10대">10대</button>
+          <button type="button" class="chip-opt" data-v="20대">20대</button>
+          <button type="button" class="chip-opt" data-v="30대">30대</button>
+          <button type="button" class="chip-opt" data-v="40대">40대</button>
+          <button type="button" class="chip-opt" data-v="50대 이상">50대 이상</button>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn btn-primary if-go" onclick="submitIntro()">테스트 시작하기
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+</div>
+
 <!-- ============ RESULT OVERLAY ============ -->
 <div class="result" id="result" role="dialog" aria-modal="true" aria-label="테스트 결과">
   <button class="res-close" onclick="closeResult()" aria-label="닫기">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
   </button>
   <div class="res-hero">
-    <span class="res-tag">당신의 WORK DNA</span>
+    <span class="res-tag" id="rTag">당신의 WORK DNA</span>
     <div class="res-emoji" id="rEmoji">🦦</div>
     <h1 class="res-name" id="rName">자유냥</h1>
     <p class="res-onel" id="rOne"></p>
@@ -947,11 +1029,89 @@ function renderPreview(){
 renderTypes();renderPreview();
 
 
+/* ================= INTRO FORM ================= */
+let userInfo={name:"",shop:"",gender:"",age:""};
+
+function openIntro(){
+  document.getElementById('introForm').classList.add('open');
+  document.body.style.overflow='hidden';
+  setTimeout(()=>{const el=document.getElementById('fName');if(el)el.focus();},260);
+}
+function closeIntro(){
+  document.getElementById('introForm').classList.remove('open');
+  document.body.style.overflow='';
+}
+/* chip 선택 (성별 / 연령대) */
+['fGender','fAge'].forEach((id)=>{
+  const box=document.getElementById(id);
+  if(!box)return;
+  box.addEventListener('click',(e)=>{
+    const b=e.target.closest('.chip-opt');
+    if(!b)return;
+    box.querySelectorAll('.chip-opt').forEach((x)=>x.classList.remove('on'));
+    b.classList.add('on');
+  });
+});
+function pickedVal(id){
+  const on=document.querySelector('#'+id+' .chip-opt.on');
+  return on?on.dataset.v:'';
+}
+function submitIntro(){
+  const nameEl=document.getElementById('fName');
+  const err=document.getElementById('fNameErr');
+  const name=(nameEl.value||'').trim();
+  if(!name){
+    nameEl.classList.add('bad');err.classList.add('show');nameEl.focus();return;
+  }
+  nameEl.classList.remove('bad');err.classList.remove('show');
+  userInfo={
+    name:name,
+    shop:(document.getElementById('fShop').value||'').trim(),
+    gender:pickedVal('fGender'),
+    age:pickedVal('fAge'),
+  };
+  closeIntro();
+  startQuiz();
+}
+/* 닉네임 입력 중 에러 해제 + 엔터로 진행 */
+(function(){
+  const el=document.getElementById('fName');
+  if(!el)return;
+  el.addEventListener('input',()=>{
+    if(el.value.trim()){
+      el.classList.remove('bad');
+      document.getElementById('fNameErr').classList.remove('show');
+    }
+  });
+  el.addEventListener('keydown',(e)=>{if(e.key==='Enter')submitIntro();});
+  const shop=document.getElementById('fShop');
+  if(shop)shop.addEventListener('keydown',(e)=>{if(e.key==='Enter')submitIntro();});
+})();
+
 /* ================= QUIZ LOGIC ================= */
 let cur=0, answers=new Array(15).fill(null);
 const quiz=document.getElementById('quiz');
+const track=(eventName,eventProperties)=>
+  window.workDnaAmplitude?.track(eventName,eventProperties);
+const GOOGLE_APPS_SCRIPT_URL=
+  "https://script.google.com/macros/s/AKfycbzzfIyzRnO1AC3Zukkc1iCmwD1_5db2ZeT3l2wk6lPXZc5eqoMeS0tdYF8J0KXhxR1Q/exec";
 
-function startQuiz(){cur=0;answers.fill(null);quiz.classList.add('open');document.body.style.overflow='hidden';buildHelix();renderQ();}
+/* 사장님용과 같은 시트로 보내되 test_type 으로 구분한다 */
+function notifySurveyComplete(resultType){
+  const params=new URLSearchParams({
+    name:userInfo.name,
+    shop:userInfo.shop,
+    gender:userInfo.gender,
+    age:userInfo.age,
+    result_type:TYPES[resultType].name,
+    test_type:"직원",
+  });
+  fetch(`${GOOGLE_APPS_SCRIPT_URL}?${params}`,{
+    method:"GET",mode:"no-cors",keepalive:true,
+  }).catch((err)=>console.warn("Apps Script completion ping failed",err));
+}
+
+function startQuiz(){track("Quiz Started");cur=0;answers.fill(null);quiz.classList.add('open');document.body.style.overflow='hidden';buildHelix();renderQ();}
 function closeQuiz(){quiz.classList.remove('open');document.getElementById('calc').classList.remove('on');document.body.style.overflow='';}
 function buildHelix(){document.getElementById('helixStrip').innerHTML=Q.map((_,i)=>`<i data-h="${i}"></i>`).join('');}
 
@@ -1018,6 +1178,17 @@ function showResult(key,score,opts){
   document.getElementById('rName').style.color=t.tc;
   document.getElementById('rOne').textContent=t.one;
 
+  /* 입력 정보로 개인화 */
+  const nick=(userInfo.name||'').trim();
+  const shop=(userInfo.shop||'').trim();
+  const tagEl=document.getElementById('rTag');
+  if(tagEl)
+    tagEl.textContent=shop
+      ? `${shop} · ${nick||'나'}의 WORK DNA`
+      : nick
+        ? `${nick}님의 WORK DNA`
+        : '당신의 WORK DNA';
+
   const splitLine=(s)=>{const p=String(s).split('|||');return {t:p[0],d:p[1]||''};};
   document.getElementById('rStrengths').innerHTML=t.strengths.map((s,i)=>{const o=splitLine(s);
     return `<div class="li"><span class="mk">${i+1}</span><span class="li-txt"><b>${o.t}</b>${o.d?`<em>${o.d}</em>`:''}</span></div>`;}).join('');
@@ -1039,6 +1210,13 @@ function showResult(key,score,opts){
   }
 
   result.classList.add('open');result.scrollTop=0;document.body.style.overflow='hidden';
+
+  if(shared){
+    track("Shared Result Viewed",{result_type:key});
+    return;
+  }
+  track("Quiz Completed",{result_type:key});
+  notifySurveyComplete(key);
 }
 function closeResult(){document.getElementById('result').classList.remove('open');document.body.style.overflow='';}
 function restart(){
@@ -1151,7 +1329,8 @@ function restoreSharedResult(){
 
 /* ---- 내 결과 공유 (결과 화면) ---- */
 function shareMyResult(){
-  sendKakao({
+  
+  track("Result Share Channel",{channel:"kakao",result_type:currentType?.key,shared_result:true});sendKakao({
     title:`내 WORK DNA는 '${currentType?.name}'`,
     description:"직원 업무 유형 테스트 결과예요. 우리 팀 궁합도 확인해보세요! 🧬",
     url:buildShareUrl(),
@@ -1161,7 +1340,8 @@ function shareMyResult(){
 /* ---- 사장님용 테스트 공유 ---- */
 function ownerUrl(){return new URL("../",location.href).href;}
 function shareOwnerTest(from){
-  sendKakao({
+  
+  track("Owner Share Clicked",{source:from,result_type:currentType?.key});sendKakao({
     title:"사장님 WORK DNA — 사장님 운영 유형 찾기",
     description:"90초면 사장님 운영 스타일과 우리 팀 궁합이 나와요 🧬",
     url:ownerUrl(),
@@ -1171,7 +1351,8 @@ function shareOwnerTest(from){
 }
 
 function shareEmployeeKakao(from){
-  sendKakao({
+  
+  track("Employee Test Share Clicked",{source:from,result_type:currentType?.key});sendKakao({
     title:'직원 WORK DNA — 나의 업무 유형 찾기',
     description:'90초면 내 업무 스타일과 사장님·동료 궁합이 나와요 🧬',
     url:baseUrl(),
@@ -1179,7 +1360,8 @@ function shareEmployeeKakao(from){
   },(ok)=>showToast(ok?'링크가 복사됐어요! 붙여넣어 공유해 주세요 📋':'복사에 실패했어요. 주소창의 링크를 직접 복사해 주세요'));
 }
 function copyPageLink(){
-  copyText(baseUrl()).then((ok)=>
+  
+  track("Page Link Copied",{source:"footer"});copyText(baseUrl()).then((ok)=>
     showToast(ok?'링크가 복사됐어요! 붙여넣어 공유해 주세요 📋':'복사에 실패했어요. 주소창의 링크를 직접 복사해 주세요'));
 }
 

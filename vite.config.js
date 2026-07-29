@@ -4,5 +4,11 @@ module.exports = {
   base: "./",
   build: {
     outDir: "docs",
+    rollupOptions: {
+      output: {
+        // 직원용 페이지(public/employee)가 이 파일을 직접 참조하므로 이름을 고정한다
+        entryFileNames: "assets/app.js",
+      },
+    },
   },
 };
