@@ -95,6 +95,10 @@
         letter-spacing: -0.02em;
         overflow-x: hidden;
         -webkit-font-smoothing: antialiased;
+        /* 한글을 글자 단위가 아니라 띄어쓰기 단위로 줄바꿈한다.
+           단어 하나가 줄보다 길 때만 예외적으로 끊는다 */
+        word-break: keep-all;
+        overflow-wrap: break-word;
       }
       img,
       svg {
