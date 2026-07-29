@@ -449,7 +449,33 @@ h1,h2,h3{letter-spacing:-.045em;line-height:1.02;font-weight:800}
 .li-txt em{display:block;font-style:normal;font-size:14.5px;font-weight:500;color:var(--muted);line-height:1.62}
 .li.neg .li-txt b{color:#b8352b}
 .li .mk{margin-top:2px}
+
+/* 푸터 공유 — 카카오톡 / 링크 복사 원형 버튼 */
+.footer-share{display:flex;justify-content:center;gap:16px}
+.fshare-btn{
+  width:58px;height:58px;border-radius:50%;
+  display:grid;place-items:center;
+  transition:transform .2s cubic-bezier(.2,.8,.2,1), box-shadow .2s, background .2s;
+}
+.fshare-btn svg{width:26px;height:26px}
+.fshare-btn:hover{transform:translateY(-3px) scale(1.05)}
+.fshare-btn.kakao{background:#fee500;color:#3c1e1e}
+.fshare-btn.kakao:hover{box-shadow:0 16px 32px -12px rgba(254,229,0,.75)}
+.fshare-btn.link{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.22)}
+.fshare-btn.link:hover{background:rgba(255,255,255,.2)}
+
+/* 안내 토스트 */
+.toast{
+  position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);z-index:200;
+  max-width:min(420px,90vw);padding:14px 22px;border-radius:999px;
+  background:rgba(11,10,18,.94);color:#fff;
+  font-size:14px;font-weight:700;text-align:center;box-shadow:var(--shadow-hard);
+  opacity:0;pointer-events:none;
+  transition:opacity .25s ease, transform .25s cubic-bezier(.2,.8,.2,1);
+}
+.toast.on{opacity:1;transform:translate(-50%,0)}
 </style>
+<script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.5/kakao.min.js" defer></script>
 </head>
 <body>
 
@@ -705,14 +731,22 @@ h1,h2,h3{letter-spacing:-.045em;line-height:1.02;font-weight:800}
   <div class="wrap">
     <span class="eyebrow on-dark" style="margin-bottom:18px"><i class="dot"></i>Team up</span>
     <h2>사장님·동료와 함께 테스트하고<br><span class="em">우리 팀 궁합</span>을 확인해보세요</h2>
-    <button class="btn btn-primary" onclick="shareLink(this)">결과 공유하기
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="18" cy="5" r="2.6" stroke="currentColor" stroke-width="2"/><circle cx="6" cy="12" r="2.6" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="19" r="2.6" stroke="currentColor" stroke-width="2"/><path d="M8.4 10.8l7.2-4.2M8.4 13.2l7.2 4.2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+    <div class="footer-share">
+      <button class="fshare-btn kakao" onclick="shareEmployeeKakao('footer')" aria-label="카카오톡으로 공유" title="카카오톡으로 공유">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3c5.8 0 10.5 3.66 10.5 8.18 0 4.51-4.7 8.17-10.5 8.17-.62 0-1.22-.04-1.8-.13l-4.36 2.9c-.22.15-.52-.06-.46-.32l.84-3.98C3.46 16.2 1.5 13.86 1.5 11.18 1.5 6.66 6.2 3 12 3z"/></svg>
+      </button>
+      <button class="fshare-btn link" onclick="copyPageLink()" aria-label="링크 복사" title="링크 복사">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10.6 13.4a4 4 0 006 .4l2.4-2.4a4 4 0 00-5.7-5.7l-1.4 1.4M13.4 10.6a4 4 0 00-6-.4L5 12.6a4 4 0 005.7 5.7l1.4-1.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
     <div class="footer-brand">
       <span class="brand"><svg class="helix" viewBox="0 0 24 24" fill="none"><path d="M6 3c0 6 12 6 12 12M18 3c0 6-12 6-12 12" stroke="#4FB8FF" stroke-width="2.2" stroke-linecap="round"/><path d="M7 6h10M7 18h10M8.5 9.5h7M8.5 14.5h7" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg>WORK <b style="color:var(--yellow)">DNA</b></span>
       <span>직원을 위한 업무 유형 진단 · 재미로 보는 테스트예요</span>
     </div>
   </div>
 </footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
 /* ================= DATA ================= */
@@ -971,6 +1005,67 @@ function drawRadar(t){
 }
 
 /* ================= SHARE ================= */
+/* 현재 페이지(직원용 WORK DNA)를 카카오톡 / 링크로 공유 — 사장님용과 동일한 방식 */
+const KAKAO_KEY="575bb3f543501f562bd79cb765345bff";
+function baseUrl(){return location.origin+location.pathname;}
+/* 배포 경로가 /work-dna/employee/ 이므로 썸네일은 상위 폴더 기준으로 푼다 */
+function ogImageUrl(){return new URL("../og-image.svg",location.href).href;}
+
+function showToast(msg){
+  const el=document.getElementById('toast');
+  if(!el)return;
+  el.textContent=msg;
+  el.classList.add('on');
+  clearTimeout(showToast._t);
+  showToast._t=setTimeout(()=>el.classList.remove('on'),2800);
+}
+async function copyText(text){
+  try{
+    await navigator.clipboard.writeText(text);
+    return true;
+  }catch(e){
+    /* 비보안 컨텍스트·구형 브라우저 폴백 */
+    const ta=document.createElement('textarea');
+    ta.value=text;ta.setAttribute('readonly','');
+    ta.style.cssText='position:fixed;top:-1000px;opacity:0';
+    document.body.appendChild(ta);ta.select();
+    let ok=false;
+    try{ok=document.execCommand('copy');}catch(err){ok=false;}
+    document.body.removeChild(ta);
+    return ok;
+  }
+}
+/* 카카오톡 공유 — SDK가 없거나 실패하면 링크 복사로 대체 */
+function sendKakao({title,description,url,buttonTitle},onFallback){
+  const link={mobileWebUrl:url,webUrl:url};
+  if(window.Kakao){
+    try{
+      if(!Kakao.isInitialized())Kakao.init(KAKAO_KEY);
+      Kakao.Share.sendDefault({
+        objectType:'feed',
+        content:{title,description,imageUrl:ogImageUrl(),link},
+        buttons:[{title:buttonTitle,link}],
+      });
+      return;
+    }catch(e){
+      console.warn('카카오 공유 실패 — 링크 복사로 대체',e);
+    }
+  }
+  copyText(`${description}\n${url}`).then((ok)=>onFallback(ok));
+}
+function shareEmployeeKakao(from){
+  sendKakao({
+    title:'직원 WORK DNA — 나의 업무 유형 찾기',
+    description:'90초면 내 업무 스타일과 사장님·동료 궁합이 나와요 🧬',
+    url:baseUrl(),
+    buttonTitle:'테스트 하러 가기',
+  },(ok)=>showToast(ok?'링크가 복사됐어요! 붙여넣어 공유해 주세요 📋':'복사에 실패했어요. 주소창의 링크를 직접 복사해 주세요'));
+}
+function copyPageLink(){
+  copyText(baseUrl()).then((ok)=>
+    showToast(ok?'링크가 복사됐어요! 붙여넣어 공유해 주세요 📋':'복사에 실패했어요. 주소창의 링크를 직접 복사해 주세요'));
+}
+
 function shareLink(btn){
   const url=location.href.split('#')[0];
   const title='WORK DNA — 직원 업무 유형 테스트';
