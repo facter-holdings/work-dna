@@ -2989,7 +2989,7 @@
         <a
           class="sns-goto"
           id="snsGoto"
-          href="/employee/"
+          href="employee/"
           target="_blank"
           rel="noopener"
           onclick="trackEmployeeGoto()"
@@ -3921,10 +3921,14 @@
       function baseUrl() {
         return location.origin + location.pathname;
       }
-      /* 직원용 WORK DNA — public/employee/ 가 배포되는 경로 */
-      const EMPLOYEE_PATH = "/employee/";
+      /* 직원용 WORK DNA — public/employee/ 가 배포되는 경로.
+         GitHub Pages가 /work-dna/ 하위에서 서빙하므로 현재 페이지 기준 상대 경로로 푼다 */
       function employeeUrl() {
-        return location.origin + EMPLOYEE_PATH;
+        return new URL("employee/", location.href).href;
+      }
+      /* 카카오 공유 카드 썸네일도 같은 이유로 현재 페이지 기준으로 푼다 */
+      function ogImageUrl() {
+        return new URL("og-image.svg", location.href).href;
       }
       function buildShareUrl() {
         if (!currentType) return baseUrl(); // 아직 결과가 없으면 테스트 초대 링크
@@ -4038,7 +4042,7 @@
               content: {
                 title,
                 description,
-                imageUrl: location.origin + "/og-image.svg",
+                imageUrl: ogImageUrl(),
                 link,
               },
               buttons: [{ title: buttonTitle, link }],
