@@ -5,6 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>WORK DNA — 나의 업무 유형 찾기 (직원용)</title>
 <meta name="description" content="나의 업무 스타일을 분석하고 어떤 사장님·동료와 최고의 팀을 만드는지 알려드립니다." />
+<link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+<meta name="theme-color" content="#2E6BFF" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="ko_KR" />
+<meta property="og:site_name" content="WORK DNA" />
+<meta property="og:title" content="직원 WORK DNA — 나의 업무 유형 찾기" />
+<meta property="og:description" content="90초면 내 업무 스타일과 사장님·동료 궁합이 나와요." />
+<meta property="og:image" content="https://facter-holdings.github.io/work-dna/og-image-employee.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="직원 WORK DNA 업무 유형 테스트" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="직원 WORK DNA — 나의 업무 유형 찾기" />
+<meta name="twitter:description" content="90초면 내 업무 스타일과 사장님·동료 궁합이 나와요." />
+<meta name="twitter:image" content="https://facter-holdings.github.io/work-dna/og-image-employee.png" />
 <link rel="preconnect" href="https://cdn.jsdelivr.net" />
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
 <style>
@@ -1057,7 +1072,10 @@ function drawRadar(t){
 const KAKAO_KEY="575bb3f543501f562bd79cb765345bff";
 function baseUrl(){return location.origin+location.pathname;}
 /* 배포 경로가 /work-dna/employee/ 이므로 썸네일은 상위 폴더 기준으로 푼다 */
-function ogImageUrl(){return new URL("../og-image.svg",location.href).href;}
+function ogImageUrl(which){
+  const file=which==="owner"?"../og-image.png":"../og-image-employee.png";
+  return new URL(file,location.href).href;
+}
 
 function showToast(msg){
   const el=document.getElementById('toast');
@@ -1084,14 +1102,14 @@ async function copyText(text){
   }
 }
 /* 카카오톡 공유 — SDK가 없거나 실패하면 링크 복사로 대체 */
-function sendKakao({title,description,url,buttonTitle},onFallback){
+function sendKakao({title,description,url,buttonTitle,image},onFallback){
   const link={mobileWebUrl:url,webUrl:url};
   if(window.Kakao){
     try{
       if(!Kakao.isInitialized())Kakao.init(KAKAO_KEY);
       Kakao.Share.sendDefault({
         objectType:'feed',
-        content:{title,description,imageUrl:ogImageUrl(),link},
+        content:{title,description,imageUrl:ogImageUrl(image),link},
         buttons:[{title:buttonTitle,link}],
       });
       return;
@@ -1148,6 +1166,7 @@ function shareOwnerTest(from){
     description:"90초면 사장님 운영 스타일과 우리 팀 궁합이 나와요 🧬",
     url:ownerUrl(),
     buttonTitle:"테스트 하러 가기",
+    image:"owner",
   },(ok)=>showToast(ok?"링크가 복사됐어요! 붙여넣어 공유해 주세요 📋":"복사에 실패했어요. 주소창의 링크를 직접 복사해 주세요"));
 }
 

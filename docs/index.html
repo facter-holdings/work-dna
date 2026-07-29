@@ -31,7 +31,7 @@
     />
     <meta
       property="og:image"
-      content="https://facter-holdings.github.io/work-dna/og-image.svg"
+      content="https://facter-holdings.github.io/work-dna/og-image.png"
     />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -47,7 +47,7 @@
     />
     <meta
       name="twitter:image"
-      content="https://facter-holdings.github.io/work-dna/og-image.svg"
+      content="https://facter-holdings.github.io/work-dna/og-image.png"
     />
     <meta name="twitter:image:alt" content="WORK DNA 사장님 운영 유형 테스트" />
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
@@ -4088,9 +4088,11 @@
       function employeeUrl() {
         return new URL("employee/", location.href).href;
       }
-      /* 카카오 공유 카드 썸네일도 같은 이유로 현재 페이지 기준으로 푼다 */
-      function ogImageUrl() {
-        return new URL("og-image.svg", location.href).href;
+      /* 카카오 공유 카드 썸네일 — 보내는 대상에 맞는 이미지를 쓴다 */
+      function ogImageUrl(which) {
+        const file =
+          which === "employee" ? "og-image-employee.png" : "og-image.png";
+        return new URL(file, location.href).href;
       }
       function buildShareUrl() {
         if (!currentType) return baseUrl(); // 아직 결과가 없으면 테스트 초대 링크
@@ -4194,7 +4196,10 @@
       }
       /* 카카오톡 공유 — SDK가 없거나 실패하면 링크 복사로 대체 */
       const KAKAO_KEY = "575bb3f543501f562bd79cb765345bff";
-      function sendKakao({ title, description, url, buttonTitle }, onFallback) {
+      function sendKakao(
+        { title, description, url, buttonTitle, image },
+        onFallback,
+      ) {
         const link = { mobileWebUrl: url, webUrl: url };
         if (window.Kakao) {
           try {
@@ -4204,7 +4209,7 @@
               content: {
                 title,
                 description,
-                imageUrl: ogImageUrl(),
+                imageUrl: ogImageUrl(image),
                 link,
               },
               buttons: [{ title: buttonTitle, link }],
@@ -4246,7 +4251,13 @@
         }
         if (ch === "kakao") {
           sendKakao(
-            { title, description: text, url, buttonTitle: btnLabel },
+            {
+              title,
+              description: text,
+              url,
+              buttonTitle: btnLabel,
+              image: currentType ? "owner" : "employee",
+            },
             () => snsFlash("링크가 복사됐어요! 카카오톡에 붙여넣어 주세요"),
           );
         }
@@ -4295,6 +4306,7 @@
               "90초면 내 업무 스타일과 사장님·동료 궁합이 나와요 🧬",
             url: employeeUrl(),
             buttonTitle: "테스트 하러 가기",
+            image: "employee",
           },
           (ok) =>
             showToast(
