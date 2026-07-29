@@ -1603,6 +1603,9 @@
         width: 21px;
         height: 21px;
       }
+      .share-act[hidden] {
+        display: none;
+      }
       .share-act:hover {
         transform: translateY(-2px);
         box-shadow: 0 14px 26px -12px rgba(11, 10, 18, 0.45);
@@ -2958,7 +2961,12 @@
           사장님의 결과 페이지를 그대로 볼 수 있는 링크예요
         </p>
         <div class="sns-actions">
-          <button class="share-act link" onclick="shareSns('link')">
+          <button
+            class="share-act link"
+            id="snsLinkBtn"
+            onclick="shareSns('link')"
+            hidden
+          >
             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path
                 d="M10.6 13.4a4 4 0 006 .4l2.4-2.4a4 4 0 00-5.7-5.7l-1.4 1.4M13.4 10.6a4 4 0 00-6-.4L5 12.6a4 4 0 005.7 5.7l1.4-1.4"
@@ -3913,6 +3921,11 @@
       function baseUrl() {
         return location.origin + location.pathname;
       }
+      /* 직원용 WORK DNA — public/employee/ 가 배포되는 경로 */
+      const EMPLOYEE_PATH = "/employee/";
+      function employeeUrl() {
+        return location.origin + EMPLOYEE_PATH;
+      }
       function buildShareUrl() {
         if (!currentType) return baseUrl(); // 아직 결과가 없으면 테스트 초대 링크
         const payload = {
@@ -3957,8 +3970,11 @@
         if (desc)
           desc.textContent = currentType
             ? "사장님의 결과 페이지를 그대로 볼 수 있는 링크예요"
-            : "직원에게 테스트 링크를 보내보세요";
-        // 결과 없이 첫 화면에서 연 팝업에서만 직원용 테스트 바로가기를 노출
+            : "직원용 WORK DNA 테스트를 카카오톡으로 보내보세요";
+        // 첫 화면에는 공유할 결과가 없으므로 링크 복사는 감추고,
+        // 직원용 테스트 바로가기를 대신 노출한다
+        const linkBtn = document.getElementById("snsLinkBtn");
+        if (linkBtn) linkBtn.hidden = !currentType;
         const goto = document.getElementById("snsGoto");
         if (goto) goto.hidden = !!currentType;
         snsFlash("");
@@ -4029,14 +4045,15 @@
         copyText(`${description}\n${url}`).then((ok) => onFallback(ok));
       }
       function shareSns(ch) {
-        const url = buildShareUrl();
+        // 결과가 있으면 그 결과 페이지를, 첫 화면에서는 직원용 테스트를 공유한다
+        const url = currentType ? buildShareUrl() : employeeUrl();
         const nick = (userInfo.name || "").trim();
         const title = currentType
           ? `${nick ? nick + " " : ""}사장님의 WORK DNA는 '${currentType.name}'`
-          : "WORK DNA — 사장님 운영 유형 테스트";
+          : "직원 WORK DNA — 나의 업무 유형 찾기";
         const text = currentType
           ? "우리 사장님 운영 유형 결과예요. 우리 팀 궁합도 확인해보세요! 🧬"
-          : "우리 팀 궁합, 같이 확인해봐요! 90초 테스트 🧬";
+          : "90초면 내 업무 스타일과 사장님·동료 궁합이 나와요 🧬";
         const btnLabel = currentType ? "결과 보러 가기" : "테스트 하러 가기";
         track("Result Share Channel", {
           channel: ch,
