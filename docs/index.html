@@ -184,6 +184,47 @@
       .brand b {
         color: var(--yellow);
       }
+      /* 사장님용 ↔ 직원용 상호 이동 링크 */
+      .nav-cross {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        color: #fff;
+        font-weight: 700;
+        font-size: 13.5px;
+        letter-spacing: -0.02em;
+        padding: 9px 16px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        white-space: nowrap;
+        transition:
+          background 0.2s ease,
+          transform 0.2s ease;
+      }
+      .nav-cross:hover {
+        background: rgba(255, 255, 255, 0.18);
+        transform: translateY(-2px);
+      }
+      .nav-cross .ico {
+        width: 16px;
+        height: 16px;
+      }
+      .nav-cross .arw {
+        width: 14px;
+        height: 14px;
+        opacity: 0.7;
+      }
+      @media (max-width: 420px) {
+        .nav-cross {
+          font-size: 12.5px;
+          padding: 8px 13px;
+          gap: 5px;
+        }
+        .nav-cross .ico {
+          display: none;
+        }
+      }
 
       /* ============ HERO ============ */
       .hero {
@@ -2226,6 +2267,26 @@
           />
         </svg>
         WORK <b>DNA</b>
+      </a>
+      <a class="nav-cross" href="employee/">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path
+            d="M6 3c0 6 12 6 12 12M18 3c0 6-12 6-12 12"
+            stroke="#4FB8FF"
+            stroke-width="2.4"
+            stroke-linecap="round"
+          />
+        </svg>
+        직원용 TEST 바로가기
+        <svg class="arw" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path
+            d="M9 6l6 6-6 6"
+            stroke="currentColor"
+            stroke-width="2.4"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
       </a>
     </nav>
 

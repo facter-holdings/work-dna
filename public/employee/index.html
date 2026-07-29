@@ -68,12 +68,22 @@ h1,h2,h3{letter-spacing:-.045em;line-height:1.02;font-weight:800}
 .brand{display:flex;align-items:center;gap:10px;color:#fff;font-weight:800;font-size:17px;letter-spacing:-.03em}
 .brand .helix{width:22px;height:22px}
 .brand b{color:var(--yellow)}
-.nav-cta{
-  color:var(--black);background:var(--yellow);
-  font-weight:800;font-size:14px;padding:10px 18px;border-radius:999px;
-  transition:transform .2s ease, box-shadow .2s ease;
+/* 직원용 ↔ 사장님용 상호 이동 링크 */
+.nav-cross{
+  display:flex;align-items:center;gap:7px;
+  color:#fff;font-weight:700;font-size:13.5px;letter-spacing:-.02em;
+  padding:9px 16px;border-radius:999px;
+  background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.20);
+  white-space:nowrap;
+  transition:background .2s ease, transform .2s ease;
 }
-.nav-cta:hover{transform:translateY(-2px);box-shadow:0 10px 24px -8px rgba(79,184,255,.6)}
+.nav-cross:hover{background:rgba(255,255,255,.18);transform:translateY(-2px)}
+.nav-cross .ico{width:16px;height:16px}
+.nav-cross .arw{width:14px;height:14px;opacity:.7}
+@media (max-width:420px){
+  .nav-cross{font-size:12.5px;padding:8px 13px;gap:5px}
+  .nav-cross .ico{display:none}
+}
 
 /* ============ HERO ============ */
 .hero{
@@ -449,7 +459,11 @@ h1,h2,h3{letter-spacing:-.045em;line-height:1.02;font-weight:800}
     <svg class="helix" viewBox="0 0 24 24" fill="none"><path d="M6 3c0 6 12 6 12 12M18 3c0 6-12 6-12 12" stroke="#4FB8FF" stroke-width="2.2" stroke-linecap="round"/><path d="M7 6h10M7 18h10M8.5 9.5h7M8.5 14.5h7" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg>
     WORK <b>DNA</b>
   </a>
-  <button class="nav-cta" onclick="startQuiz()">테스트 시작하기</button>
+  <a class="nav-cross" href="../">
+    <svg class="ico" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 3c0 6 12 6 12 12M18 3c0 6-12 6-12 12" stroke="#FFD43B" stroke-width="2.4" stroke-linecap="round"/></svg>
+    사장님 TEST 바로가기
+    <svg class="arw" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </a>
 </nav>
 
 <span id="top"></span>
