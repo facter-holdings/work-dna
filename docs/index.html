@@ -1401,10 +1401,15 @@
       }
       .emp-row {
         display: flex;
-        gap: 12px;
+        gap: 14px;
         align-items: center;
         padding: 14px 0;
         border-top: 1px solid var(--line);
+      }
+      /* 배지가 글자에 바짝 붙지 않도록 최소 간격을 준다 */
+      .emp-row .txt {
+        min-width: 0;
+        padding-right: 6px;
       }
       .emp-row:first-of-type {
         border-top: none;
@@ -1429,6 +1434,9 @@
         font-weight: 800;
         padding: 5px 11px;
         border-radius: 999px;
+        /* 좁은 화면에서 배지 글자가 줄바꿈되며 찌그러지는 것을 막는다 */
+        white-space: nowrap;
+        flex: none;
       }
       .badge.good {
         background: rgba(52, 199, 89, 0.14);

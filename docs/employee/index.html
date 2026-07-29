@@ -355,12 +355,15 @@ h1,h2,h3{letter-spacing:-.045em;line-height:1.02;font-weight:800}
 .li:first-of-type{border-top:none}
 .li .mk{flex:none;width:24px;height:24px;border-radius:8px;display:grid;place-items:center;font-size:13px;font-weight:900;background:rgba(46,107,255,.1);color:var(--purple)}
 .li.neg .mk{background:rgba(224,69,59,.1);color:#e0453b}
-.emp-row{display:flex;gap:12px;align-items:center;padding:14px 0;border-top:1px solid var(--line)}
+.emp-row{display:flex;gap:14px;align-items:center;padding:14px 0;border-top:1px solid var(--line)}
+/* 배지가 글자에 바짝 붙지 않도록 최소 간격을 준다 */
+.emp-row .txt{min-width:0;padding-right:6px}
 .emp-row:first-of-type{border-top:none}
 .emp-row .em{font-size:40px;line-height:1}
 .emp-row .txt b{display:block;font-size:16px;font-weight:800}
 .emp-row .txt span{font-size:13.5px;color:var(--muted);font-weight:500}
-.emp-row .badge{margin-left:auto;font-size:12px;font-weight:800;padding:5px 11px;border-radius:999px}
+/* 좁은 화면에서 배지 글자가 줄바꿈되며 찌그러지는 것을 막는다 */
+.emp-row .badge{margin-left:auto;font-size:12px;font-weight:800;padding:5px 11px;border-radius:999px;white-space:nowrap;flex:none}
 .badge.good{background:rgba(52,199,89,.14);color:#1f9d4d}
 .badge.bad{background:rgba(224,69,59,.12);color:#e0453b}
 .panel.full{grid-column:1/-1}
