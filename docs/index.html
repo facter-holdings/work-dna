@@ -2983,7 +2983,7 @@
                 d="M12 3c5.8 0 10.5 3.66 10.5 8.18 0 4.51-4.7 8.17-10.5 8.17-.62 0-1.22-.04-1.8-.13l-4.36 2.9c-.22.15-.52-.06-.46-.32l.84-3.98C3.46 16.2 1.5 13.86 1.5 11.18 1.5 6.66 6.2 3 12 3z"
               />
             </svg>
-            카카오톡 공유하기
+            <span id="snsKakaoLabel">카카오톡 공유하기</span>
           </button>
         </div>
         <a
@@ -3970,7 +3970,13 @@
         if (desc)
           desc.textContent = currentType
             ? "사장님의 결과 페이지를 그대로 볼 수 있는 링크예요"
-            : "직원용 WORK DNA 테스트를 카카오톡으로 보내보세요";
+            : "직원이 바로 해볼 수 있는 직원용 WORK DNA를 보내보세요";
+        // 첫 화면에서는 보내는 대상이 직원용 테스트라는 걸 버튼에도 드러낸다
+        const kakaoLabel = document.getElementById("snsKakaoLabel");
+        if (kakaoLabel)
+          kakaoLabel.textContent = currentType
+            ? "카카오톡 공유하기"
+            : "직원 WORK DNA 공유하기";
         // 첫 화면에는 공유할 결과가 없으므로 링크 복사는 감추고,
         // 직원용 테스트 바로가기를 대신 노출한다
         const linkBtn = document.getElementById("snsLinkBtn");
@@ -4094,9 +4100,9 @@
         });
         sendKakao(
           {
-            title: "우리 사장님은 어떤 유형일까요? 🧬",
+            title: "사장님 WORK DNA — 사장님 운영 유형 찾기",
             description:
-              "90초면 사장님 운영 스타일과 우리 팀 궁합이 나오는 WORK DNA 테스트",
+              "90초면 사장님 운영 스타일과 우리 팀 궁합이 나와요 🧬",
             url,
             buttonTitle: "테스트 하러 가기",
           },
