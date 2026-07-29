@@ -354,7 +354,29 @@ h1,h2,h3{letter-spacing:-.045em;line-height:1.02;font-weight:800}
 .tm-bar{height:16px;border-radius:999px;background:var(--surface-2);overflow:hidden;margin:10px 0 6px}
 .tm-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--purple),var(--yellow));width:0;transition:width 1.1s cubic-bezier(.2,.8,.2,1)}
 .tm-row{display:flex;justify-content:space-between;font-weight:700;font-size:13.5px;color:var(--muted)}
-.res-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:28px}
+/* 결과 하단 — 공유 카드 + 색 테두리 알약 (사장님용과 동일 구성) */
+.res-actions{display:flex;flex-direction:column;align-items:center;gap:15px;width:min(560px,100%);margin:30px auto 0}
+.res-share-card{width:100%;background:#fff;border:1px solid var(--line);border-radius:20px;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.res-share-copy b{display:block;font-size:14.5px;font-weight:800;color:var(--ink)}
+.res-share-copy span{display:block;font-size:12px;font-weight:600;color:#8b86a8;margin-top:3px}
+.res-share-card .btn{flex:none;font-size:14px;padding:12px 22px}
+.btn-kakao{background:#fee500;color:#3c1e1e}
+.btn-kakao:hover{transform:translateY(-3px);box-shadow:0 18px 38px -14px rgba(254,229,0,.8)}
+.res-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;width:100%}
+.res-link{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-size:14.5px;font-weight:800;letter-spacing:-.02em;padding:13px 10px;border-radius:999px;border:1.5px solid currentColor;transition:transform .2s cubic-bezier(.2,.8,.2,1), background .2s ease}
+.res-link .dot{width:8px;height:8px;border-radius:50%;background:currentColor;flex:none}
+.res-link.owner{color:#5B2EFF}
+.res-link.owner:hover{transform:translateY(-2px);background:rgba(91,46,255,.07)}
+.res-link.staff{color:#2E6BFF}
+.res-link.staff:hover{transform:translateY(-2px);background:rgba(46,107,255,.07)}
+.res-restart{font-size:15px;font-weight:700;color:var(--muted);text-decoration:underline;text-underline-offset:4px;padding:6px 4px;transition:color .2s ease}
+.res-restart:hover{color:var(--ink)}
+.res-shared-note{display:none;margin:18px auto 0;padding:9px 18px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);color:#fff;font-size:13.5px;font-weight:700;width:fit-content;max-width:90%}
+.res-shared-note.on{display:block}
+@media (max-width:520px){
+  .res-share-card{flex-direction:column;align-items:stretch;text-align:center;gap:14px}
+  .res-share-card .btn{width:100%}
+}
 .btn-dark{background:var(--black);color:#fff}
 .btn-dark:hover{transform:translateY(-3px);box-shadow:var(--shadow-hard)}
 
@@ -684,6 +706,7 @@ h1,h2,h3{letter-spacing:-.045em;line-height:1.02;font-weight:800}
     <div class="res-emoji" id="rEmoji">🦦</div>
     <h1 class="res-name" id="rName">자유냥</h1>
     <p class="res-onel" id="rOne"></p>
+    <p class="res-shared-note" id="rSharedNote"></p>
   </div>
   <div class="res-body">
     <div class="res-grid">
@@ -718,10 +741,21 @@ h1,h2,h3{letter-spacing:-.045em;line-height:1.02;font-weight:800}
     </div>
 
     <div class="res-actions">
-      <button class="btn btn-primary" onclick="shareLink(this)">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="18" cy="5" r="2.6" stroke="currentColor" stroke-width="2"/><circle cx="6" cy="12" r="2.6" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="19" r="2.6" stroke="currentColor" stroke-width="2"/><path d="M8.4 10.8l7.2-4.2M8.4 13.2l7.2 4.2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        결과 공유하기</button>
-      <button class="btn btn-dark" onclick="restart()">다시 테스트하기</button>
+      <div class="res-share-card">
+        <div class="res-share-copy">
+          <b>이 결과를 공유해보세요</b>
+          <span>카카오톡으로 바로 전송돼요</span>
+        </div>
+        <button class="btn btn-kakao" onclick="shareMyResult()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c5.8 0 10.5 3.66 10.5 8.18 0 4.51-4.7 8.17-10.5 8.17-.62 0-1.22-.04-1.8-.13l-4.36 2.9c-.22.15-.52-.06-.46-.32l.84-3.98C3.46 16.2 1.5 13.86 1.5 11.18 1.5 6.66 6.2 3 12 3z"/></svg>
+          내 결과 공유하기
+        </button>
+      </div>
+      <div class="res-links">
+        <button class="res-link owner" onclick="shareOwnerTest('result')"><span class="dot"></span>사장님용 TEST 공유</button>
+        <button class="res-link staff" onclick="shareEmployeeKakao('result')"><span class="dot"></span>직원용 TEST 공유</button>
+      </div>
+      <button class="res-restart" onclick="restart()">다시 테스트하기</button>
     </div>
   </div>
 </div>
@@ -957,7 +991,11 @@ function finish(){
 
 /* ================= RESULT ================= */
 let currentType=null;
-function showResult(key,score){
+/* 공유 링크로 들어와 남의 결과를 보는 중인지 */
+let sharedView=false;
+function showResult(key,score,opts){
+  const shared=!!(opts&&opts.shared);
+  sharedView=shared;
   const t=TYPES[key];currentType=t;
   const result=document.getElementById('result');
   document.getElementById('rEmoji').innerHTML=CHAR[key];
@@ -979,10 +1017,20 @@ function showResult(key,score){
 
   drawRadar(t);
 
+  const noteEl=document.getElementById('rSharedNote');
+  if(noteEl){
+    noteEl.textContent=shared?'공유받은 결과예요 🧬':'';
+    noteEl.classList.toggle('on',shared);
+  }
+
   result.classList.add('open');result.scrollTop=0;document.body.style.overflow='hidden';
 }
 function closeResult(){document.getElementById('result').classList.remove('open');document.body.style.overflow='';}
-function restart(){closeResult();startQuiz();}
+function restart(){
+  /* 공유받은 화면에서 다시 시작하면 링크의 결과 정보를 지운다 */
+  if(sharedView){clearShareParam();sharedView=false;currentType=null;}
+  closeResult();startQuiz();
+}
 
 /* ---- radar chart (SVG) ---- */
 function drawRadar(t){
@@ -1053,6 +1101,56 @@ function sendKakao({title,description,url,buttonTitle},onFallback){
   }
   copyText(`${description}\n${url}`).then((ok)=>onFallback(ok));
 }
+/* ---- 결과를 URL에 담아 공유 (서버가 없으므로 링크 자체가 저장소) ---- */
+const SHARE_PARAM="r";
+function b64urlEncode(str){
+  const bytes=new TextEncoder().encode(str);
+  let bin="";
+  bytes.forEach((b)=>(bin+=String.fromCharCode(b)));
+  return btoa(bin).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+}
+function b64urlDecode(str){
+  const b64=str.replace(/-/g,"+").replace(/_/g,"/");
+  const bin=atob(b64+"===".slice((b64.length+3)%4));
+  return new TextDecoder().decode(Uint8Array.from(bin,(c)=>c.charCodeAt(0)));
+}
+function buildShareUrl(){
+  if(!currentType)return baseUrl();
+  return `${baseUrl()}?${SHARE_PARAM}=${b64urlEncode(JSON.stringify({v:1,k:currentType.key}))}`;
+}
+function clearShareParam(){
+  if(!new URLSearchParams(location.search).get(SHARE_PARAM))return;
+  history.replaceState(null,"",baseUrl()+location.hash);
+}
+function restoreSharedResult(){
+  const raw=new URLSearchParams(location.search).get(SHARE_PARAM);
+  if(!raw)return;
+  let data=null;
+  try{data=JSON.parse(b64urlDecode(raw));}catch(e){console.warn("공유 링크를 해석하지 못했어요",e);return;}
+  if(!data||!TYPES[data.k])return;
+  showResult(data.k,null,{shared:true});
+}
+
+/* ---- 내 결과 공유 (결과 화면) ---- */
+function shareMyResult(){
+  sendKakao({
+    title:`내 WORK DNA는 '${currentType?.name}'`,
+    description:"직원 업무 유형 테스트 결과예요. 우리 팀 궁합도 확인해보세요! 🧬",
+    url:buildShareUrl(),
+    buttonTitle:"결과 보러 가기",
+  },(ok)=>showToast(ok?"결과 링크가 복사됐어요! 붙여넣어 공유해 주세요 📋":"복사에 실패했어요. 주소창의 링크를 직접 복사해 주세요"));
+}
+/* ---- 사장님용 테스트 공유 ---- */
+function ownerUrl(){return new URL("../",location.href).href;}
+function shareOwnerTest(from){
+  sendKakao({
+    title:"사장님 WORK DNA — 사장님 운영 유형 찾기",
+    description:"90초면 사장님 운영 스타일과 우리 팀 궁합이 나와요 🧬",
+    url:ownerUrl(),
+    buttonTitle:"테스트 하러 가기",
+  },(ok)=>showToast(ok?"링크가 복사됐어요! 붙여넣어 공유해 주세요 📋":"복사에 실패했어요. 주소창의 링크를 직접 복사해 주세요"));
+}
+
 function shareEmployeeKakao(from){
   sendKakao({
     title:'직원 WORK DNA — 나의 업무 유형 찾기',
@@ -1087,6 +1185,9 @@ function closeShare(){const s=document.getElementById('shareStage');if(s)s.class
 /* ================= PREVIEW ================= */
 function openPreview(){const p=document.getElementById('preview');if(!p)return;p.classList.add('open');document.body.style.overflow='hidden';}
 function closePreview(){const p=document.getElementById('preview');if(!p)return;p.classList.remove('open');if(!document.getElementById('result').classList.contains('open')&&!quiz.classList.contains('open'))document.body.style.overflow='';}
+
+/* ================= BOOT ================= */
+restoreSharedResult();
 
 /* ================= NAV hide-on-scroll ================= */
 let lastY=0;const nav=document.getElementById('nav');

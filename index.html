@@ -1503,43 +1503,46 @@
         padding: 12px 22px;
       }
       .res-links {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 16px;
-        flex-wrap: wrap;
-        font-size: 16px;
-        font-weight: 700;
-        color: var(--muted);
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 10px;
+        width: 100%;
       }
       .res-link {
         display: inline-flex;
         align-items: center;
+        justify-content: center;
         gap: 8px;
-        font-size: 16px;
-        font-weight: 700;
+        font-size: 14.5px;
+        font-weight: 800;
         letter-spacing: -0.02em;
-        color: var(--ink);
-        padding: 6px 2px;
-        transition: color 0.2s ease;
-      }
-      .res-link:hover {
-        color: var(--purple);
+        padding: 13px 10px;
+        border-radius: 999px;
+        border: 1.5px solid currentColor;
+        transition:
+          transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1),
+          background 0.2s ease;
       }
       .res-link .dot {
         width: 8px;
         height: 8px;
         border-radius: 50%;
+        background: currentColor;
         flex: none;
       }
-      .res-link.owner .dot {
-        background: var(--purple);
+      .res-link.owner {
+        color: var(--purple);
       }
-      .res-link.staff .dot {
-        background: #2e6bff;
+      .res-link.owner:hover {
+        transform: translateY(-2px);
+        background: rgba(91, 46, 255, 0.07);
       }
-      .res-sep {
-        color: #c9c6d8;
+      .res-link.staff {
+        color: #2e6bff;
+      }
+      .res-link.staff:hover {
+        transform: translateY(-2px);
+        background: rgba(46, 107, 255, 0.07);
       }
       .res-restart {
         font-size: 15px;
@@ -3098,7 +3101,6 @@
             <button class="res-link owner" onclick="shareToOwner('result')">
               <span class="dot"></span>사장님용 TEST 공유
             </button>
-            <span class="res-sep">·</span>
             <button class="res-link staff" onclick="shareEmployeeTest('result')">
               <span class="dot"></span>직원용 TEST 공유
             </button>
