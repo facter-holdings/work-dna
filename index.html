@@ -206,9 +206,13 @@
         background: rgba(255, 255, 255, 0.18);
         transform: translateY(-2px);
       }
-      .nav-cross .ico {
-        width: 16px;
-        height: 16px;
+      /* 가는 곳의 테마색을 점으로 — 결과 페이지 알약과 같은 규칙 */
+      .nav-cross .ndot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #4fb8ff;
+        flex: none;
       }
       .nav-cross .arw {
         width: 14px;
@@ -219,10 +223,7 @@
         .nav-cross {
           font-size: 12.5px;
           padding: 8px 13px;
-          gap: 5px;
-        }
-        .nav-cross .ico {
-          display: none;
+          gap: 6px;
         }
       }
 
@@ -2373,14 +2374,7 @@
         WORK <b>DNA</b>
       </a>
       <a class="nav-cross" href="employee/">
-        <svg class="ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path
-            d="M6 3c0 6 12 6 12 12M18 3c0 6-12 6-12 12"
-            stroke="#4FB8FF"
-            stroke-width="2.4"
-            stroke-linecap="round"
-          />
-        </svg>
+        <span class="ndot"></span>
         직원용 TEST 바로가기
         <svg class="arw" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path

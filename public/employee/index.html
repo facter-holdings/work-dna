@@ -78,11 +78,11 @@ h1,h2,h3{letter-spacing:-.045em;line-height:1.02;font-weight:800}
   transition:background .2s ease, transform .2s ease;
 }
 .nav-cross:hover{background:rgba(255,255,255,.18);transform:translateY(-2px)}
-.nav-cross .ico{width:16px;height:16px}
+/* 가는 곳의 테마색을 점으로 — 결과 페이지 알약과 같은 규칙 */
+.nav-cross .ndot{width:7px;height:7px;border-radius:50%;background:#FFD43B;flex:none}
 .nav-cross .arw{width:14px;height:14px;opacity:.7}
 @media (max-width:420px){
-  .nav-cross{font-size:12.5px;padding:8px 13px;gap:5px}
-  .nav-cross .ico{display:none}
+  .nav-cross{font-size:12.5px;padding:8px 13px;gap:6px}
 }
 
 /* ============ HERO ============ */
@@ -508,7 +508,7 @@ h1,h2,h3{letter-spacing:-.045em;line-height:1.02;font-weight:800}
     WORK <b>DNA</b>
   </a>
   <a class="nav-cross" href="../">
-    <svg class="ico" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 3c0 6 12 6 12 12M18 3c0 6-12 6-12 12" stroke="#FFD43B" stroke-width="2.4" stroke-linecap="round"/></svg>
+    <span class="ndot"></span>
     사장님 TEST 바로가기
     <svg class="arw" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
   </a>
