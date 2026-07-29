@@ -3766,6 +3766,7 @@
           gender: userInfo.gender,
           age: userInfo.age,
           result_type: TYPES[resultType].name,
+          test_type: "사장님",
         });
         fetch(`${GOOGLE_APPS_SCRIPT_URL}?${params}`, {
           method: "GET",
