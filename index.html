@@ -21,33 +21,24 @@
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="ko_KR" />
     <meta property="og:site_name" content="WORK DNA" />
-    <meta
-      property="og:title"
-      content="WORK DNA — 사장님 운영 유형 테스트"
-    />
+    <meta property="og:title" content="WORK DNA — 사장님 운영 유형 테스트" />
     <meta
       property="og:description"
       content="당신의 운영 스타일을 분석하고 어떤 직원과 최고의 팀을 만드는지 알려드립니다."
     />
-    <meta
-      property="og:image"
-      content="https://facter-holdings.github.io/work-dna/og-image.png"
-    />
+    <meta property="og:image" content="http://work-dna.bdlab.kr/og-image.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="WORK DNA 사장님 운영 유형 테스트" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta
-      name="twitter:title"
-      content="WORK DNA — 사장님 운영 유형 테스트"
-    />
+    <meta name="twitter:title" content="WORK DNA — 사장님 운영 유형 테스트" />
     <meta
       name="twitter:description"
       content="당신의 운영 스타일을 분석하고 어떤 직원과 최고의 팀을 만드는지 알려드립니다."
     />
     <meta
       name="twitter:image"
-      content="https://facter-holdings.github.io/work-dna/og-image.png"
+      content="http://work-dna.bdlab.kr/og-image.png"
     />
     <meta name="twitter:image:alt" content="WORK DNA 사장님 운영 유형 테스트" />
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
@@ -3169,7 +3160,10 @@
             <button class="res-link owner" onclick="shareToOwner('result')">
               <span class="dot"></span>사장님용 TEST 공유
             </button>
-            <button class="res-link staff" onclick="shareEmployeeTest('result')">
+            <button
+              class="res-link staff"
+              onclick="shareEmployeeTest('result')"
+            >
               <span class="dot"></span>직원용 TEST 공유
             </button>
           </div>
@@ -3189,7 +3183,7 @@
       role="dialog"
       aria-modal="true"
       aria-label="SNS 공유하기"
-      onclick="if (event.target === this) closeShare()"
+      onclick="if (event.target === this) closeShare();"
     >
       <div class="sns-box">
         <button class="sns-close" onclick="closeShare()" aria-label="닫기">
@@ -4395,8 +4389,7 @@
         sendKakao(
           {
             title: "직원 WORK DNA — 나의 업무 유형 찾기",
-            description:
-              "90초면 내 업무 스타일과 사장님·동료 궁합이 나와요 🧬",
+            description: "90초면 내 업무 스타일과 사장님·동료 궁합이 나와요 🧬",
             url: employeeUrl(),
             buttonTitle: "테스트 하러 가기",
             image: "employee",
@@ -4434,8 +4427,7 @@
         sendKakao(
           {
             title: "사장님 WORK DNA — 사장님 운영 유형 찾기",
-            description:
-              "90초면 사장님 운영 스타일과 우리 팀 궁합이 나와요 🧬",
+            description: "90초면 사장님 운영 스타일과 우리 팀 궁합이 나와요 🧬",
             url,
             buttonTitle: "테스트 하러 가기",
           },
